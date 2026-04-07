@@ -5,1413 +5,451 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GRIDtRAVELER Labs — Real-Time Spatial Intelligence Platform</title>
 <meta name="description" content="The spatial intelligence platform built on Unreal Engine 5. Transforming any physical environment into a programmable, data-responsive reality.">
+<meta property="og:title" content="GRIDtRAVELER Labs — Real-Time Spatial Intelligence Platform">
+<meta property="og:description" content="The spatial intelligence platform built on Unreal Engine 5.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
 :root{
-  --black:   #04050A;
-  --deep:    #070810;
-  --surface: #0C0D18;
-  --lift:    #12141F;
-  --border:  rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.13);
-  --gold:    #C9A84C;
-  --gold-l:  #E8C97A;
-  --gold-d:  rgba(201,168,76,0.12);
-  --cyan:    #00C4CC;
-  --text:    #E8EBF2;
-  --muted:   rgba(232,235,242,0.45);
-  --dim:     rgba(232,235,242,0.2);
-  --display: 'Cormorant Garamond', serif;
-  --mono:    'JetBrains Mono', monospace;
-  --sans:    'Outfit', sans-serif;
-  --max:     1280px;
+--background:230 40% 3%;--foreground:225 30% 92%;
+--card:232 38% 6%;--card-foreground:225 30% 92%;
+--primary:43 57% 54%;--primary-foreground:40 80% 4%;
+--secondary:230 25% 10%;--secondary-foreground:225 30% 92%;
+--muted:230 20% 12%;--muted-foreground:225 15% 55%;
+--accent:230 25% 10%;--accent-foreground:225 30% 92%;
+--border:230 20% 15%;--ring:43 57% 54%;
+--gold:43 57% 54%;--gold-light:40 65% 70%;
+--deep:232 38% 4.5%;--surface:232 38% 7%;
+--lift:230 25% 10%;--dim:225 15% 35%;
+--cyan:180 100% 40%;
 }
-
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{
-  background:var(--black);
-  color:var(--text);
-  font-family:var(--sans);
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+background:hsl(var(--background));color:hsl(var(--foreground));
+font-family:'Outfit',sans-serif;-webkit-font-smoothing:antialiased;
+overflow-x:hidden;line-height:1.6;
 }
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+opacity:0.5;}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+.font-display{font-family:'Cormorant Garamond',serif}
+.font-mono{font-family:'JetBrains Mono',monospace}
+.text-primary{color:hsl(var(--primary))}
+.text-foreground{color:hsl(var(--foreground))}
+.text-muted{color:hsl(var(--muted-foreground))}
+.text-dim{color:hsl(var(--dim))}
+.bg-background{background:hsl(var(--background))}
+.bg-surface{background:hsl(var(--surface))}
+.bg-deep{background:hsl(var(--deep))}
+.bg-lift{background:hsl(var(--lift))}
+.bg-primary{background:hsl(var(--primary))}
+.border-clr{border-color:hsl(var(--border))}
+.border-primary{border-color:hsl(var(--primary))}
+.max-w-container{max-width:1280px}
 
-/* ── NOISE OVERLAY ─────────────────────── */
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity:0.5;
-}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:hsl(var(--background)/0.8);backdrop-filter:blur(20px);border-bottom:1px solid hsl(var(--border))}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-box{width:36px;height:36px;border:1px solid hsl(var(--primary));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:hsl(var(--primary));letter-spacing:3px;position:relative}
+.nav-logo-box::after{content:'';position:absolute;inset:3px;border:1px solid hsl(var(--primary)/0.2)}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:3px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:36px}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--muted-foreground));transition:color 0.2s}
+.nav-links a:hover{color:hsl(var(--foreground))}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-weight:500;transition:all 0.2s;cursor:pointer;border:none;border-radius:2px;font-size:14px;white-space:nowrap}
+.btn-gold{background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-weight:600;padding:12px 40px;box-shadow:0 0 40px hsl(var(--gold)/0.25)}
+.btn-gold:hover{background:hsl(var(--gold-light));box-shadow:0 0 60px hsl(var(--gold)/0.4);transform:translateY(-1px)}
+.btn-outline{border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));padding:12px 40px}
+.btn-outline:hover{border-color:hsl(var(--primary));color:hsl(var(--primary))}
+.btn-nav{background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 16px}
+.btn-nav-ghost{border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 16px}
+.btn-ghost-gold{border:1px solid hsl(var(--border)/0.5);background:transparent;color:hsl(var(--muted-foreground));padding:12px 40px}
+.btn-ghost-gold:hover{border-color:hsl(var(--primary));color:hsl(var(--primary))}
+.btn-full{width:100%}
 
-/* ── NAV ───────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  height:72px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 48px;
-  background:rgba(4,5,10,0.8);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.nav-logo{
-  display:flex;align-items:center;gap:12px;
-  text-decoration:none;
-}
-.logo-mark{
-  width:36px;height:36px;
-  border:1px solid var(--gold);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  color:var(--gold);letter-spacing:1px;
-  position:relative;
-}
-.logo-mark::before{
-  content:'';position:absolute;
-  top:3px;left:3px;right:3px;bottom:3px;
-  border:1px solid rgba(201,168,76,0.2);
-}
-.logo-text{
-  font-family:var(--mono);font-size:13px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--text);
-}
-.logo-text span{color:var(--gold);}
-
-.nav-links{
-  display:flex;align-items:center;gap:36px;
-  list-style:none;
-}
-.nav-links a{
-  font-size:12px;font-family:var(--mono);
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--muted);text-decoration:none;
-  transition:color 0.2s;
-}
-.nav-links a:hover{color:var(--text);}
-
-.nav-cta{
-  display:flex;align-items:center;gap:12px;
-}
-.btn-nav-ghost{
-  padding:9px 22px;border-radius:2px;
-  border:1px solid var(--border2);
-  color:var(--muted);text-decoration:none;
-  font-size:12px;font-family:var(--mono);
-  letter-spacing:1px;text-transform:uppercase;
-  transition:all 0.2s;
-}
-.btn-nav-ghost:hover{border-color:var(--gold);color:var(--gold);}
-
-.btn-nav-primary{
-  padding:9px 24px;border-radius:2px;
-  background:var(--gold);
-  color:#0a0800;text-decoration:none;
-  font-size:12px;font-family:var(--mono);font-weight:500;
-  letter-spacing:1px;text-transform:uppercase;
-  transition:all 0.2s;
-}
-.btn-nav-primary:hover{background:var(--gold-l);}
-
-/* ── HERO ──────────────────────────────── */
-.hero{
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;
-  padding:72px 48px 0;
-  position:relative;z-index:1;
-  overflow:hidden;
-}
-
-/* Grid lines */
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);
-  background-size:80px 80px;
-  mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);
-}
-
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:7px 18px;
-  border:1px solid rgba(201,168,76,0.3);
-  background:rgba(201,168,76,0.06);
-  border-radius:1px;
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:40px;
-  animation:fadeUp 0.6s ease both;
-}
-.eyebrow-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:var(--gold);
-  box-shadow:0 0 8px var(--gold);
-  animation:pulse 2s infinite;
-}
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 48px 0;position:relative;z-index:1;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+background-image:linear-gradient(hsl(43 57% 54%/0.04) 1px,transparent 1px),linear-gradient(90deg,hsl(43 57% 54%/0.04) 1px,transparent 1px);
+background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border:1px solid hsl(var(--primary)/0.3);background:hsl(var(--primary)/0.05);border-radius:1px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:40px}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:hsl(var(--primary));box-shadow:0 0 8px hsl(var(--gold));animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7vw,110px);font-weight:300;line-height:0.95;letter-spacing:-0.02em;margin-bottom:32px}
+.hero h1 em{font-style:italic;color:hsl(var(--primary))}
+.hero h1 .sub{display:block;font-size:clamp(38px,5vw,76px);color:hsl(var(--muted-foreground));font-weight:300}
+.hero-desc{font-size:clamp(15px,1.5vw,18px);color:hsl(var(--muted-foreground));max-width:640px;line-height:1.7;margin-bottom:48px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:80px}
+.metrics-bar{display:flex;border:1px solid hsl(var(--border));background:hsl(var(--surface)/0.8);backdrop-filter:blur(20px);max-width:900px;width:100%}
+.metric{flex:1;padding:24px 32px;text-align:left}
+.metric+.metric{border-left:1px solid hsl(var(--border))}
+.metric-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:hsl(var(--primary));line-height:1;margin-bottom:6px}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim))}
 
-.hero-title{
-  font-family:var(--display);
-  font-size:clamp(52px,7vw,110px);
-  font-weight:300;
-  line-height:0.95;
-  letter-spacing:-2px;
-  margin-bottom:32px;
-  animation:fadeUp 0.6s 0.1s ease both;
-}
-.hero-title em{
-  font-style:italic;
-  color:var(--gold);
-}
-.hero-title .line2{
-  display:block;
-  font-size:clamp(38px,5vw,76px);
-  color:var(--muted);
-  font-weight:300;
-  letter-spacing:-1px;
-}
+/* CREDITS */
+.credits{padding:48px 0;border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));overflow:hidden}
+.credits-track{display:flex;align-items:center;gap:64px;white-space:nowrap;width:max-content;animation:scroll 20s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.credits-track span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--dim))}
+.credits-track .highlight{color:hsl(var(--primary)/0.5)}
 
-.hero-sub{
-  font-size:clamp(15px,1.5vw,18px);
-  color:var(--muted);
-  max-width:640px;
-  line-height:1.7;
-  margin-bottom:52px;
-  animation:fadeUp 0.6s 0.2s ease both;
-}
+/* PROBLEMS */
+.problems{padding:56px 0;border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));background:hsl(var(--deep))}
+.problems-inner{max-width:1280px;margin:0 auto;padding:0 48px;display:flex;align-items:center;gap:24px;overflow-x:auto}
+.problem-item{flex-shrink:0;display:flex;align-items:center;gap:16px;padding-right:24px}
+.problem-item+.problem-item{border-left:1px solid hsl(var(--border));padding-left:24px}
+.problem-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:hsl(var(--primary));font-weight:600;white-space:nowrap}
+.problem-text{font-size:13px;color:hsl(var(--muted-foreground));max-width:160px;line-height:1.6}
 
-.hero-actions{
-  display:flex;gap:16px;flex-wrap:wrap;
-  justify-content:center;
-  margin-bottom:80px;
-  animation:fadeUp 0.6s 0.3s ease both;
-}
+/* SECTION COMMON */
+.section{padding:112px 0;position:relative;z-index:1}
+.section-inner{max-width:1280px;margin:0 auto;padding:0 48px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section-label::before{content:'';width:32px;height:1px;background:hsl(var(--primary))}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,64px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.section-title em{font-style:italic;color:hsl(var(--primary))}
+.section-desc{font-size:15px;color:hsl(var(--muted-foreground));max-width:560px;line-height:1.7}
+.gold-line{width:48px;height:1px;background:hsl(var(--primary));margin:32px 0}
 
-.btn-primary{
-  padding:16px 40px;
-  background:var(--gold);
-  color:#0a0800;
-  border:none;border-radius:2px;
-  font-family:var(--sans);font-size:14px;font-weight:600;
-  letter-spacing:0.5px;
-  cursor:pointer;text-decoration:none;
-  transition:all 0.2s;
-  box-shadow:0 0 40px rgba(201,168,76,0.25);
-}
-.btn-primary:hover{
-  background:var(--gold-l);
-  box-shadow:0 0 60px rgba(201,168,76,0.4);
-  transform:translateY(-1px);
-}
+/* PLATFORM */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:hsl(var(--border));margin-top:64px;border:1px solid hsl(var(--border))}
+.platform-card{background:hsl(var(--surface));padding:48px;position:relative;overflow:hidden;transition:background 0.3s}
+.platform-card:hover{background:hsl(var(--lift))}
+.platform-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,hsl(var(--primary)),transparent);opacity:0;transition:opacity 0.3s}
+.platform-card:hover::before{opacity:1}
+.platform-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:hsl(var(--dim));margin-bottom:20px}
+.platform-title{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:16px;line-height:1.2;white-space:pre-line}
+.platform-body{font-size:14px;color:hsl(var(--muted-foreground));line-height:1.7}
+.platform-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.platform-tags span{padding:4px 10px;border:1px solid hsl(var(--border));font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:hsl(var(--dim))}
 
-.btn-secondary{
-  padding:16px 40px;
-  background:transparent;
-  color:var(--text);
-  border:1px solid var(--border2);
-  border-radius:2px;
-  font-family:var(--sans);font-size:14px;font-weight:500;
-  cursor:pointer;text-decoration:none;
-  transition:all 0.2s;
-}
-.btn-secondary:hover{
-  border-color:var(--gold);
-  color:var(--gold);
-}
+/* INDUSTRIES */
+.industries-strip{display:flex;overflow-x:auto;gap:1px;background:hsl(var(--border));margin-top:64px}
+.industry-card{flex-shrink:0;width:240px;background:hsl(var(--surface));padding:40px;border-bottom:3px solid transparent;transition:all 0.2s;cursor:pointer}
+.industry-card:hover{background:hsl(var(--lift));border-bottom-color:hsl(var(--primary))}
+.industry-icon{font-size:28px;margin-bottom:16px}
+.industry-title{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:10px}
+.industry-body{font-size:12px;color:hsl(var(--muted-foreground));line-height:1.6}
 
-/* Hero metrics bar */
-.hero-metrics{
-  display:flex;align-items:stretch;
-  border:1px solid var(--border);
-  background:rgba(12,13,24,0.8);
-  backdrop-filter:blur(12px);
-  max-width:900px;width:100%;
-  animation:fadeUp 0.6s 0.4s ease both;
-}
-.metric{
-  flex:1;padding:24px 32px;
-  border-right:1px solid var(--border);
-  text-align:left;
-}
-.metric:last-child{border-right:none;}
-.metric-num{
-  font-family:var(--display);font-size:42px;
-  font-weight:600;color:var(--gold);
-  line-height:1;margin-bottom:6px;
-}
-.metric-label{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim);
-}
+/* PRICING */
+.pricing-toggle{display:flex;align-items:center;gap:16px;margin-bottom:64px}
+.toggle-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:color 0.2s;background:none;border:none}
+.toggle-label.active{color:hsl(var(--primary))}
+.toggle-label.inactive{color:hsl(var(--dim))}
+.toggle-track{width:48px;height:24px;border-radius:12px;border:1px solid hsl(var(--border));background:hsl(var(--surface));position:relative;cursor:pointer}
+.toggle-track.on{background:hsl(var(--primary)/0.2);border-color:hsl(var(--primary))}
+.toggle-thumb{width:16px;height:16px;border-radius:50%;position:absolute;top:3px;transition:all 0.2s}
+.toggle-thumb.off{left:4px;background:hsl(var(--dim))}
+.toggle-thumb.on{right:4px;left:auto;background:hsl(var(--primary))}
+.save-badge{margin-left:8px;color:hsl(var(--primary)/0.6)}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pricing-card{background:hsl(var(--surface));border:1px solid hsl(var(--border));padding:40px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:border-color 0.3s}
+.pricing-card:hover{border-color:hsl(var(--primary)/0.3)}
+.pricing-card.featured{border-color:hsl(var(--primary));background:linear-gradient(135deg,hsl(var(--primary)/0.1),hsl(var(--surface)))}
+.popular-badge{position:absolute;top:0;left:0;right:0;text-align:center;padding:6px;background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;font-weight:500}
+.tier-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:16px}
+.tier-name{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:8px}
+.tier-tagline{font-size:12px;color:hsl(var(--muted-foreground));margin-bottom:28px;line-height:1.6;min-height:52px}
+.tier-price{display:flex;align-items:flex-start;gap:4px;margin-bottom:6px}
+.tier-dollar{font-family:'JetBrains Mono',monospace;font-size:16px;color:hsl(var(--muted-foreground));padding-top:6px}
+.tier-amount{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;line-height:1}
+.tier-custom{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;line-height:1;padding-top:8px}
+.tier-period{font-family:'JetBrains Mono',monospace;font-size:11px;color:hsl(var(--dim));margin-bottom:28px}
+.tier-divider{height:1px;background:hsl(var(--border));margin:24px 0}
+.tier-features{display:flex;flex-direction:column;gap:12px;flex:1;margin-bottom:32px}
+.tier-feature{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.6}
+.tier-feature.active{color:hsl(var(--muted-foreground))}
+.tier-feature.inactive{color:hsl(var(--dim))}
+.tier-feature .arrow{font-family:'JetBrains Mono',monospace;font-size:12px;flex-shrink:0;margin-top:2px}
+.tier-feature.active .arrow{color:hsl(var(--primary))}
+.tier-feature.inactive .arrow{color:hsl(var(--dim))}
 
-/* ── SECTIONS ──────────────────────────── */
-section{position:relative;z-index:1;}
-.container{
-  max-width:var(--max);
-  margin:0 auto;
-  padding:0 48px;
-}
-.section-pad{padding:120px 0;}
+/* INVESTOR */
+.investor-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:flex-start;margin-top:64px}
+.investor-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:hsl(var(--border));border:1px solid hsl(var(--border))}
+.investor-stat{background:hsl(var(--surface));padding:32px}
+.investor-stat-num{font-family:'Cormorant Garamond',serif;font-size:44px;color:hsl(var(--primary));font-weight:600;line-height:1;margin-bottom:8px}
+.investor-stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim))}
 
-.section-label{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:16px;
-  display:flex;align-items:center;gap:12px;
-}
-.section-label::before{
-  content:'';width:32px;height:1px;background:var(--gold);
-}
+/* SIGNUP */
+.signup{max-width:640px;margin:0 auto;text-align:center;padding:112px 24px}
+.signup h2{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,72px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.signup h2 em{font-style:italic;color:hsl(var(--primary))}
+.form-row{display:flex;gap:12px;margin-bottom:16px}
+.form-group{flex:1;display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.form-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));text-align:left}
+.form-input,.form-select{background:hsl(var(--surface));border:1px solid hsl(var(--border));border-radius:2px;padding:14px 16px;color:hsl(var(--foreground));font-size:14px;outline:none;transition:border-color 0.2s;font-family:'Outfit',sans-serif;width:100%}
+.form-input:focus,.form-select:focus{border-color:hsl(var(--primary))}
+.form-input::placeholder{color:hsl(var(--dim))}
+.form-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:hsl(var(--dim));text-align:center;margin-top:16px}
 
-.section-title{
-  font-family:var(--display);
-  font-size:clamp(36px,4vw,64px);
-  font-weight:300;line-height:1.1;
-  letter-spacing:-1px;
-  margin-bottom:20px;
-}
-.section-title em{font-style:italic;color:var(--gold);}
+/* FOOTER */
+.footer{border-top:1px solid hsl(var(--border));background:hsl(var(--deep));position:relative;z-index:1;padding:64px 48px}
+.footer-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:48px;margin-bottom:48px}
+.footer-heading{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--dim));margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a,.footer-links span{font-size:13px;color:hsl(var(--muted-foreground));transition:color 0.2s}
+.footer-links a:hover{color:hsl(var(--primary))}
+.footer-bottom{border-top:1px solid hsl(var(--border));padding-top:32px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));max-width:1280px;margin:0 auto}
+.footer-desc{font-size:13px;color:hsl(var(--muted-foreground));line-height:1.7;max-width:280px}
 
-/* ── PROBLEM STRIP ─────────────────────── */
-.problem{
-  padding:60px 0;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  background:var(--deep);
+/* RESPONSIVE */
+@media(max-width:1024px){
+.pricing-grid{grid-template-columns:1fr 1fr}
+.investor-grid{grid-template-columns:1fr}
+.platform-grid{grid-template-columns:1fr}
+.nav-links,.nav-actions{display:none}
 }
-.problem-inner{
-  max-width:var(--max);margin:0 auto;padding:0 48px;
-  display:flex;align-items:center;gap:24px;
-  overflow-x:auto;
-}
-.problem-item{
-  flex-shrink:0;
-  display:flex;align-items:center;gap:16px;
-  padding-right:24px;
-  border-right:1px solid var(--border);
-}
-.problem-item:last-child{border-right:none;}
-.p-num{
-  font-family:var(--display);font-size:36px;
-  color:var(--gold);font-weight:600;
-  white-space:nowrap;
-}
-.p-text{
-  font-size:13px;color:var(--muted);
-  max-width:160px;line-height:1.5;
-}
-
-/* ── WHAT WE BUILD ─────────────────────── */
-.what-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1px;
-  background:var(--border);
-  margin-top:64px;
-  border:1px solid var(--border);
-}
-.what-card{
-  background:var(--surface);
-  padding:48px;
-  position:relative;overflow:hidden;
-  transition:background 0.3s;
-}
-.what-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--gold),transparent);
-  opacity:0;transition:opacity 0.3s;
-}
-.what-card:hover{background:var(--lift);}
-.what-card:hover::before{opacity:1;}
-
-.what-num{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:3px;color:var(--dim);
-  margin-bottom:20px;
-}
-.what-title{
-  font-family:var(--display);font-size:28px;
-  font-weight:400;margin-bottom:16px;
-  line-height:1.2;
-}
-.what-body{
-  font-size:14px;color:var(--muted);
-  line-height:1.8;
-}
-.what-tech{
-  display:flex;flex-wrap:wrap;gap:8px;
-  margin-top:24px;
-}
-.tech-tag{
-  padding:4px 10px;border-radius:1px;
-  border:1px solid var(--border);
-  font-family:var(--mono);font-size:9px;
-  letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--dim);
-}
-
-/* ── INDUSTRIES ────────────────────────── */
-.industries{
-  background:var(--deep);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-.industry-scroll{
-  display:flex;
-  overflow-x:auto;
-  gap:1px;
-  background:var(--border);
-  margin-top:64px;
-  scrollbar-width:none;
-}
-.industry-scroll::-webkit-scrollbar{display:none;}
-.industry-card{
-  flex:0 0 240px;
-  background:var(--surface);
-  padding:40px 32px;
-  border-bottom:3px solid transparent;
-  transition:all 0.2s;cursor:pointer;
-}
-.industry-card:hover{
-  background:var(--lift);
-  border-bottom-color:var(--gold);
-}
-.ind-icon{font-size:28px;margin-bottom:16px;}
-.ind-title{
-  font-family:var(--display);font-size:22px;
-  margin-bottom:10px;
-}
-.ind-body{
-  font-size:12px;color:var(--muted);
-  line-height:1.7;
-}
-
-/* ── CREDITS ───────────────────────────── */
-.credits-strip{
-  padding:48px 0;
-  border-top:1px solid var(--border);
-  overflow:hidden;
-  background:var(--black);
-}
-.credits-track{
-  display:flex;align-items:center;gap:64px;
-  animation:scrollTrack 20s linear infinite;
-  white-space:nowrap;
-  width:max-content;
-}
-.credits-track span{
-  font-family:var(--mono);font-size:11px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--dim);
-  flex-shrink:0;
-}
-.credits-track span.gold{color:rgba(201,168,76,0.5);}
-@keyframes scrollTrack{
-  from{transform:translateX(0);}
-  to{transform:translateX(-50%);}
-}
-
-/* ── PRICING ───────────────────────────── */
-.pricing-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr;
-  gap:16px;
-  margin-top:64px;
-}
-
-.price-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  padding:40px 32px;
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;
-  transition:border-color 0.3s;
-}
-.price-card:hover{border-color:rgba(201,168,76,0.3);}
-
-.price-card.featured{
-  border-color:var(--gold);
-  background:linear-gradient(160deg,rgba(201,168,76,0.08) 0%,var(--surface) 60%);
-}
-.price-card.featured::before{
-  content:'MOST POPULAR';
-  position:absolute;top:0;left:0;right:0;
-  text-align:center;
-  padding:6px;
-  background:var(--gold);
-  color:#0a0800;
-  font-family:var(--mono);font-size:9px;
-  letter-spacing:3px;font-weight:500;
-}
-
-.price-tier{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:16px;
-}
-.price-card.featured .price-tier{margin-top:20px;}
-
-.price-name{
-  font-family:var(--display);font-size:28px;
-  font-weight:400;margin-bottom:8px;
-}
-.price-tagline{
-  font-size:12px;color:var(--muted);
-  margin-bottom:28px;line-height:1.6;
-  min-height:52px;
-}
-
-.price-amount{
-  display:flex;align-items:flex-start;gap:4px;
-  margin-bottom:6px;
-}
-.price-currency{
-  font-family:var(--mono);font-size:16px;
-  color:var(--muted);padding-top:6px;
-}
-.price-num{
-  font-family:var(--display);font-size:52px;
-  font-weight:600;line-height:1;color:var(--text);
-}
-.price-period{
-  font-family:var(--mono);font-size:11px;
-  color:var(--dim);margin-bottom:28px;
-}
-
-.price-divider{
-  height:1px;background:var(--border);margin:24px 0;
-}
-
-.price-features{
-  list-style:none;
-  display:flex;flex-direction:column;gap:12px;
-  flex:1;margin-bottom:32px;
-}
-.price-features li{
-  display:flex;align-items:flex-start;gap:10px;
-  font-size:13px;color:var(--muted);line-height:1.5;
-}
-.price-features li::before{
-  content:'→';
-  color:var(--gold);flex-shrink:0;
-  font-family:var(--mono);font-size:12px;
-  margin-top:1px;
-}
-.price-features li.dim::before{color:var(--dim);}
-.price-features li.dim{color:var(--dim);}
-
-.btn-price{
-  width:100%;padding:14px;
-  text-align:center;
-  border-radius:2px;
-  font-family:var(--sans);font-size:13px;font-weight:600;
-  cursor:pointer;text-decoration:none;
-  transition:all 0.2s;border:none;
-  letter-spacing:0.5px;
-}
-.btn-price-ghost{
-  background:transparent;
-  border:1px solid var(--border2);
-  color:var(--muted);
-}
-.btn-price-ghost:hover{border-color:var(--gold);color:var(--gold);}
-.btn-price-gold{
-  background:var(--gold);
-  color:#0a0800;
-}
-.btn-price-gold:hover{background:var(--gold-l);}
-.btn-price-dark{
-  background:var(--lift);
-  border:1px solid var(--border2);
-  color:var(--text);
-}
-.btn-price-dark:hover{border-color:var(--gold);color:var(--gold);}
-
-/* ── INVESTOR SECTION ──────────────────── */
-.investor{
-  background:var(--deep);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-.investor-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:64px;
-  align-items:start;
-  margin-top:64px;
-}
-.investor-stats{
-  display:grid;grid-template-columns:1fr 1fr;gap:1px;
-  background:var(--border);border:1px solid var(--border);
-}
-.inv-stat{
-  background:var(--surface);
-  padding:32px 28px;
-}
-.inv-num{
-  font-family:var(--display);font-size:44px;
-  color:var(--gold);font-weight:600;line-height:1;
-  margin-bottom:8px;
-}
-.inv-label{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim);
-}
-
-.investor-text p{
-  font-size:15px;color:var(--muted);
-  line-height:1.9;margin-bottom:20px;
-}
-.investor-text strong{color:var(--text);}
-
-.investor-cta{
-  margin-top:40px;
-  display:flex;flex-direction:column;gap:16px;
-}
-.inv-cta-label{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim);
-}
-
-/* ── SIGNUP FORM ───────────────────────── */
-.signup{background:var(--black);}
-.signup-inner{
-  max-width:640px;margin:0 auto;
-  text-align:center;padding:120px 48px;
-}
-.signup-title{
-  font-family:var(--display);
-  font-size:clamp(40px,5vw,72px);
-  font-weight:300;line-height:1.1;
-  letter-spacing:-1px;
-  margin-bottom:20px;
-}
-.signup-title em{font-style:italic;color:var(--gold);}
-.signup-sub{
-  font-size:15px;color:var(--muted);
-  line-height:1.7;margin-bottom:48px;
-}
-
-.form-group{
-  display:flex;flex-direction:column;gap:12px;
-  margin-bottom:16px;
-}
-.form-row{display:flex;gap:12px;}
-.form-row .form-group{flex:1;margin-bottom:0;}
-
-.form-label{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--dim);text-align:left;
-}
-.form-input, .form-select{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:2px;
-  padding:14px 18px;
-  color:var(--text);
-  font-family:var(--sans);font-size:14px;
-  outline:none;width:100%;
-  transition:border-color 0.2s;
-  appearance:none;
-  -webkit-appearance:none;
-}
-.form-input:focus, .form-select:focus{
-  border-color:var(--gold);
-}
-.form-input::placeholder{color:var(--dim);}
-
-.form-select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 16px center;
-  padding-right:40px;
-  cursor:pointer;
-}
-.form-select option{background:var(--surface);color:var(--text);}
-
-.btn-submit{
-  width:100%;padding:18px;
-  background:var(--gold);
-  color:#0a0800;
-  border:none;border-radius:2px;
-  font-family:var(--sans);font-size:15px;font-weight:700;
-  letter-spacing:0.5px;
-  cursor:pointer;
-  transition:all 0.2s;
-  margin-top:8px;
-  box-shadow:0 0 40px rgba(201,168,76,0.2);
-}
-.btn-submit:hover{
-  background:var(--gold-l);
-  box-shadow:0 0 60px rgba(201,168,76,0.35);
-}
-
-.form-note{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:1px;color:var(--dim);
-  text-align:center;margin-top:16px;
-}
-
-/* ── FOOTER ────────────────────────────── */
-footer{
-  border-top:1px solid var(--border);
-  background:var(--deep);
-  padding:60px 48px 40px;
-  position:relative;z-index:1;
-}
-.footer-inner{
-  max-width:var(--max);margin:0 auto;
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:48px;margin-bottom:48px;
-}
-.footer-brand p{
-  font-size:13px;color:var(--muted);
-  line-height:1.8;margin-top:16px;max-width:280px;
-}
-.footer-col-title{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--dim);margin-bottom:16px;
-}
-.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
-.footer-links a{
-  font-size:13px;color:var(--muted);
-  text-decoration:none;transition:color 0.2s;
-}
-.footer-links a:hover{color:var(--gold);}
-.footer-bottom{
-  border-top:1px solid var(--border);
-  padding-top:32px;
-  display:flex;align-items:center;justify-content:space-between;
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:2px;text-transform:uppercase;color:var(--dim);
-}
-
-/* ── ANIMATIONS ────────────────────────── */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-.reveal{
-  opacity:0;transform:translateY(24px);
-  transition:opacity 0.6s ease,transform 0.6s ease;
-}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.reveal-2{transition-delay:0.1s;}
-.reveal-3{transition-delay:0.2s;}
-.reveal-4{transition-delay:0.3s;}
-
-/* ── DIVIDER ───────────────────────────── */
-.gold-line{
-  width:48px;height:1px;background:var(--gold);
-  margin:32px 0;
-}
-
-/* ── MODAL SUCCESS ─────────────────────── */
-.modal-overlay{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(4,5,10,0.9);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;
-}
-.modal-overlay.open{display:flex;}
-.modal{
-  background:var(--surface);border:1px solid var(--gold);
-  padding:56px 48px;max-width:480px;width:90%;
-  text-align:center;position:relative;
-}
-.modal-icon{font-size:40px;margin-bottom:20px;}
-.modal-title{
-  font-family:var(--display);font-size:36px;
-  font-weight:300;margin-bottom:12px;
-  color:var(--gold);
-}
-.modal-body{font-size:14px;color:var(--muted);line-height:1.7;}
-.modal-close{
-  position:absolute;top:20px;right:24px;
-  background:none;border:none;color:var(--muted);
-  font-size:20px;cursor:pointer;
-}
-.modal-close:hover{color:var(--text);}
-
-@media(max-width:900px){
-  nav{padding:0 24px;}
-  .nav-links{display:none;}
-  .container{padding:0 24px;}
-  .hero{padding:72px 24px 0;}
-  .hero-metrics{flex-direction:column;}
-  .metric{border-right:none;border-bottom:1px solid var(--border);}
-  .what-grid{grid-template-columns:1fr;}
-  .pricing-grid{grid-template-columns:1fr 1fr;}
-  .investor-grid{grid-template-columns:1fr;}
-  .footer-inner{grid-template-columns:1fr 1fr;}
-  .form-row{flex-direction:column;}
-}
-@media(max-width:600px){
-  .pricing-grid{grid-template-columns:1fr;}
-  .footer-inner{grid-template-columns:1fr;}
-  .hero-title{font-size:44px;}
-}
-
-/* ── LOGO CROP TECHNIQUE ──────────────────
-   The logo image has black padding around the text.
-   We use overflow:hidden + negative margin to crop it tight.
-   Image text occupies ~60% width, ~42% height of the full image.
-────────────────────────────────────────── */
-
-/* NAV LOGO */
-.nav-logo{ text-decoration:none; display:flex; align-items:center; }
-.nav-logo-img-wrap{
-  overflow:hidden;
-  height:38px;
-  width:220px;
-  position:relative;
-}
-.nav-logo-img{
-  position:absolute;
-  width:370%;
-  top:50%;left:50%;
-  transform:translate(-50%, -50%);
-  /* The image is 1333w x 750h. Text is ~800w x 310h centered.
-     Scale so text fills the 220px wide container:
-     220 / (800/1333 * 100%) = need width ~366% of container */
-  filter:brightness(1.05);
-}
-
-/* HERO LOGO — full bleed, crops padding */
-.hero-logo-wrap{
-  overflow:hidden;
-  width:100%;
-  max-width:1000px;
-  height:clamp(64px, 14vw, 160px);
-  position:relative;
-  margin-bottom:0;
-  animation:fadeUp 0.5s ease both;
-}
-.hero-logo-img{
-  position:absolute;
-  width:175%;
-  top:50%;left:50%;
-  transform:translate(-50%, -50%);
-  /* crops the black padding, showing only the text region */
-}
-
-/* HERO TAGLINE */
-.hero-tagline{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  font-family:var(--mono);font-size:clamp(9px,1.8vw,12px);
-  letter-spacing:clamp(1px,0.4vw,3px);text-transform:uppercase;
-  color:var(--gold);
-  margin-top:12px;
-  margin-bottom:32px;
-  animation:fadeUp 0.5s 0.1s ease both;
-  text-align:center;
-  padding:0 16px;
-}
-
-/* HERO CTA STACK */
-.hero-cta-stack{
-  display:flex;flex-direction:column;
-  align-items:center;gap:16px;
-  margin-bottom:52px;
-  animation:fadeUp 0.5s 0.25s ease both;
-}
-.hero-btn-main{
-  min-width:220px;
-  text-align:center;
-}
-.hero-cta-row{
-  display:flex;align-items:center;gap:16px;
-}
-.hero-cta-divider{
-  color:var(--dim);
-  font-family:var(--mono);font-size:12px;
-}
-.hero-link-plans,
-.hero-link-investor{
-  font-family:var(--mono);font-size:11px;
-  letter-spacing:2px;text-transform:uppercase;
-  text-decoration:none;
-  transition:color 0.2s;
-}
-.hero-link-plans{ color:var(--muted); }
-.hero-link-plans:hover{ color:var(--gold); }
-.hero-link-investor{ color:var(--muted); }
-.hero-link-investor:hover{ color:var(--gold); }
-
-/* FOOTER LOGO */
-.footer-logo-wrap{
-  overflow:hidden;
-  width:200px;
-  height:36px;
-  position:relative;
-  margin-bottom:12px;
-}
-.footer-logo-img{
-  position:absolute;
-  width:340%;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-}
-
-/* ── MOBILE OVERRIDES ─────────────────────
-   iPhone: logo spans full width left→right
-────────────────────────────────────────── */
 @media(max-width:768px){
-  /* Nav: logo full left, no links, just access button */
-  nav{ padding:0 16px; height:60px; }
-  .nav-links{ display:none; }
-  .nav-logo-img-wrap{
-    width:160px;
-    height:30px;
-  }
-  /* On mobile nav the logo is smaller but legible */
-
-  /* Hero logo: full viewport width, tight crop */
-  .hero-logo-wrap{
-    width:calc(100% + 0px);
-    max-width:100%;
-    height:clamp(52px, 18vw, 90px);
-    margin-left:0;
-    margin-right:0;
-  }
-  .hero-logo-img{
-    width:185%;
-    /* slightly wider crop on mobile to fill edge-to-edge */
-  }
-
-  /* Tagline wraps nicely on mobile */
-  .hero-tagline{
-    font-size:9px;
-    letter-spacing:1.5px;
-    flex-direction:column;
-    gap:4px;
-    line-height:1.6;
-  }
-
-  /* CTA row stacks on narrow screens */
-  .hero-cta-row{
-    flex-direction:column;
-    gap:10px;
-  }
-  .hero-cta-divider{ display:none; }
-
-  /* Hero sub text smaller */
-  .hero-sub{ font-size:14px; }
-
-  /* Footer logo smaller */
-  .footer-logo-wrap{ width:160px; height:28px; }
+.nav{padding:0 24px}
+.hero{padding:72px 24px 0}
+.metrics-bar{flex-direction:column}
+.metric+.metric{border-left:none;border-top:1px solid hsl(var(--border))}
+.pricing-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr 1fr}
+.section-inner,.problems-inner{padding:0 24px}
+.footer{padding:64px 24px}
+.form-row{flex-direction:column}
 }
-
-@media(max-width:400px){
-  .hero-logo-img{ width:200%; }
-  .hero-tagline{ font-size:8px; letter-spacing:1px; }
-}
-
-
-/* ── CSS TEXT LOGO (replaces image — gives full color control) ─── */
-.gt-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  text-decoration: none;
-  line-height: 1;
-}
-.gt-logo-main {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  letter-spacing: 2px;
-  color: var(--gold);
-  line-height: 1;
-  text-transform: uppercase;
-}
-.gt-logo-sub {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  letter-spacing: 8px;
-  color: #E8EBF2;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-/* NAV logo size */
-nav .gt-logo-main { font-size: 22px; }
-nav .gt-logo-sub  { font-size: 11px; letter-spacing: 6px; margin-top: 1px; }
-
-/* HERO logo size — matches the metric numbers scale */
-.hero-logo-text .gt-logo-main {
-  font-size: clamp(42px, 9vw, 96px);
-  letter-spacing: clamp(1px, 0.5vw, 6px);
-}
-.hero-logo-text .gt-logo-sub {
-  font-size: clamp(14px, 3vw, 30px);
-  letter-spacing: clamp(6px, 2vw, 16px);
-  margin-top: clamp(2px, 0.5vw, 6px);
-}
-.hero-logo-text {
-  text-align: center;
-  animation: fadeUp 0.5s ease both;
-  width: 100%;
-  align-items: center;
-}
-
-/* FOOTER logo size */
-.footer-gt-logo .gt-logo-main { font-size: 20px; }
-.footer-gt-logo .gt-logo-sub  { font-size: 10px; letter-spacing: 6px; margin-top: 1px; }
-
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo gt-logo">
-    <span class="gt-logo-main">GRIDtRAVELER</span>
-    <span class="gt-logo-sub">Labs</span>
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-box">GT</div>
+    <div class="nav-brand">GRID<span class="text-primary">t</span>RAVELER <span class="text-dim">LABS</span></div>
   </a>
   <ul class="nav-links">
     <li><a href="#platform">Platform</a></li>
-    <li><a href="#industries">Industries</a></li>
+    <li><a href="#industries">Services</a></li>
+    <li><a href="#research">Research</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#investors">Investors</a></li>
+    <li><a href="#about">About</a></li>
   </ul>
-  <div class="nav-cta">
-    <a href="#signup" class="btn-nav-primary">Request Access</a>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-nav-ghost">Sign In</a>
+    <a href="#contact" class="btn btn-nav">Request Access</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-
-  <!-- HERO LOGO — CSS text, gold + white, sized like metric numbers -->
-  <div class="hero-logo-text gt-logo">
-    <span class="gt-logo-main">GRIDtRAVELER</span>
-    <span class="gt-logo-sub">Labs</span>
-  </div>
-
-    <!-- TAGLINE directly under logo -->
-  <div class="hero-tagline">
+  <div class="eyebrow">
     <div class="eyebrow-dot"></div>
     Real-Time Spatial Intelligence · Built on Unreal Engine 5
   </div>
-
-  <p class="hero-sub">
-    GRIDtRAVELER Labs is building the spatial operating layer for physical environments — transforming any venue, surgical theater, mission control room, or LED volume into a programmable, data-responsive, AI-controlled reality.
+  <h1>
+    Any Space.<br>
+    <em>Any Reality.</em>
+    <span class="sub">In Real Time.</span>
+  </h1>
+  <p class="hero-desc">
+    GRIDtRAVELER Labs is building the spatial operating layer for physical
+    environments — transforming any venue, surgical theater, mission control
+    room, or LED volume into a programmable, data-responsive, AI-controlled reality.
   </p>
-
-  <!-- CTA STACK: primary → view plans → investor -->
-  <div class="hero-cta-stack">
-    <a href="#signup" class="btn-primary hero-btn-main">Request Access</a>
-    <div class="hero-cta-row">
-      <a href="#pricing" class="hero-link-plans">View Plans ↓</a>
-      <span class="hero-cta-divider">·</span>
-      <a href="#investors" class="hero-link-investor">Investor Overview →</a>
-    </div>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn btn-gold">Request Early Access</a>
+    <a href="#about" class="btn btn-outline">Learn More →</a>
   </div>
-
-  <div class="hero-metrics">
-    <div class="metric">
-      <div class="metric-num">5+</div>
-      <div class="metric-label">Industries Served</div>
-    </div>
-    <div class="metric">
-      <div class="metric-num">$384B</div>
-      <div class="metric-label">Digital Twin Market by 2034</div>
-    </div>
-    <div class="metric">
-      <div class="metric-num">33%</div>
-      <div class="metric-label">Virtual Production CAGR</div>
-    </div>
-    <div class="metric">
-      <div class="metric-num">UE5</div>
-      <div class="metric-label">Native Architecture</div>
-    </div>
+  <div class="metrics-bar">
+    <div class="metric"><div class="metric-num">5+</div><div class="metric-label">Industries Served</div></div>
+    <div class="metric"><div class="metric-num">$384B</div><div class="metric-label">Digital Twin Market by 2034</div></div>
+    <div class="metric"><div class="metric-num">33%</div><div class="metric-label">Virtual Production CAGR</div></div>
+    <div class="metric"><div class="metric-num">UE5</div><div class="metric-label">Native Architecture</div></div>
   </div>
 </section>
 
-<!-- CREDITS STRIP -->
-<div class="credits-strip">
-  <div class="credits-track" id="credits-track">
-    <span class="gold">Morgan Wallen</span><span>·</span>
-    <span class="gold">Katy Perry</span><span>·</span>
-    <span class="gold">Sphere Las Vegas</span><span>·</span>
-    <span class="gold">Leon Bridges</span><span>·</span>
-    <span>Deloitte</span><span>·</span>
-    <span>Volvo Group</span><span>·</span>
-    <span>Live Nation</span><span>·</span>
-    <span>Riot Games</span><span>·</span>
-    <span>Disney</span><span>·</span>
-    <span>The Weather Channel</span><span>·</span>
-    <span>Comedy Central</span><span>·</span>
-    <span>LG</span><span>·</span>
-    <span>Hilton</span><span>·</span>
-    <span>Cadillac Innerspace</span><span>·</span>
-    <!-- duplicate for seamless loop -->
-    <span class="gold">Morgan Wallen</span><span>·</span>
-    <span class="gold">Katy Perry</span><span>·</span>
-    <span class="gold">Sphere Las Vegas</span><span>·</span>
-    <span class="gold">Leon Bridges</span><span>·</span>
-    <span>Deloitte</span><span>·</span>
-    <span>Volvo Group</span><span>·</span>
-    <span>Live Nation</span><span>·</span>
-    <span>Riot Games</span><span>·</span>
-    <span>Disney</span><span>·</span>
-    <span>The Weather Channel</span><span>·</span>
-    <span>Comedy Central</span><span>·</span>
-    <span>LG</span><span>·</span>
-    <span>Hilton</span><span>·</span>
-    <span>Cadillac Innerspace</span><span>·</span>
+<!-- CREDITS -->
+<div class="credits">
+  <div class="credits-track">
+    <span class="highlight">Morgan Wallen</span><span> · </span>
+    <span class="highlight">Katy Perry</span><span> · </span>
+    <span class="highlight">Sphere Las Vegas</span><span> · </span>
+    <span class="highlight">Leon Bridges</span><span> · </span>
+    <span>Deloitte</span><span> · </span>
+    <span>Volvo Group</span><span> · </span>
+    <span>Live Nation</span><span> · </span>
+    <span>Riot Games</span><span> · </span>
+    <span>Disney</span><span> · </span>
+    <span>The Weather Channel</span><span> · </span>
+    <span>Comedy Central</span><span> · </span>
+    <span>LG</span><span> · </span>
+    <span>Hilton</span><span> · </span>
+    <span>Cadillac Innerspace</span><span> · </span>
+    <span class="highlight">Morgan Wallen</span><span> · </span>
+    <span class="highlight">Katy Perry</span><span> · </span>
+    <span class="highlight">Sphere Las Vegas</span><span> · </span>
+    <span class="highlight">Leon Bridges</span><span> · </span>
+    <span>Deloitte</span><span> · </span>
+    <span>Volvo Group</span><span> · </span>
+    <span>Live Nation</span><span> · </span>
+    <span>Riot Games</span><span> · </span>
+    <span>Disney</span><span> · </span>
+    <span>The Weather Channel</span><span> · </span>
+    <span>Comedy Central</span><span> · </span>
+    <span>LG</span><span> · </span>
+    <span>Hilton</span><span> · </span>
+    <span>Cadillac Innerspace</span>
   </div>
 </div>
 
-<!-- PROBLEM -->
-<div class="problem">
-  <div class="problem-inner">
-    <div class="problem-item">
-      <div class="p-num">$0</div>
-      <div class="p-text">Unified software standard for LED volume stages today</div>
-    </div>
-    <div class="problem-item">
-      <div class="p-num">20min</div>
-      <div class="p-text">Mars rover communication delay with no spatial simulation</div>
-    </div>
-    <div class="problem-item">
-      <div class="p-num">2D</div>
-      <div class="p-text">How surgeons still visualize 3D anatomy during operations</div>
-    </div>
-    <div class="problem-item">
-      <div class="p-num">6%</div>
-      <div class="p-text">Top 10 digital twin players combined market share — wide open</div>
-    </div>
-    <div class="problem-item">
-      <div class="p-num">∞</div>
-      <div class="p-text">Industries needing real-time spatial intelligence — one platform serves all</div>
-    </div>
+<!-- PROBLEMS -->
+<div class="problems">
+  <div class="problems-inner">
+    <div class="problem-item"><div class="problem-num">$0</div><div class="problem-text">Unified software standard for LED volume stages today</div></div>
+    <div class="problem-item"><div class="problem-num">20min</div><div class="problem-text">Mars rover communication delay with no spatial simulation</div></div>
+    <div class="problem-item"><div class="problem-num">2D</div><div class="problem-text">How surgeons still visualize 3D anatomy during operations</div></div>
+    <div class="problem-item"><div class="problem-num">6%</div><div class="problem-text">Top 10 digital twin players combined market share — wide open</div></div>
+    <div class="problem-item"><div class="problem-num">∞</div><div class="problem-text">Industries needing real-time spatial intelligence</div></div>
   </div>
 </div>
 
 <!-- PLATFORM -->
-<section class="section-pad" id="platform">
-  <div class="container">
-    <div class="section-label reveal">The Platform</div>
-    <h2 class="section-title reveal reveal-2">
-      Not software.<br>
-      <em>Infrastructure.</em>
-    </h2>
-    <p style="font-size:16px;color:var(--muted);max-width:600px;line-height:1.8;" class="reveal reveal-3">
-      Built entirely on Unreal Engine 5 — Lumen, Nanite, Niagara, nDisplay, Pixel Streaming — the GRIDtRAVELER platform is the first spatial intelligence layer that works identically across industries. Configure it for a concert stage or a surgical theater. The engine never changes.
+<section class="section" id="platform">
+  <div class="section-inner">
+    <div class="section-label">The Platform</div>
+    <h2 class="section-title">Not software.<br><em>Infrastructure.</em></h2>
+    <p class="section-desc">
+      Built entirely on Unreal Engine 5 — the GRIDtRAVELER platform is the
+      first spatial intelligence layer that works identically across
+      industries. Configure it for a concert stage or a surgical theater.
+      The engine never changes.
     </p>
-
-    <div class="what-grid">
-      <div class="what-card reveal">
-        <div class="what-num">01 — RENDERING ENGINE</div>
-        <div class="what-title">Lumen + Nanite<br>at Full Fidelity</div>
-        <div class="what-body">Physically accurate global illumination that responds to live data in real time. Infinite geometric detail with zero LOD management. The first platform to use Lumen as a data communication medium — surfaces glow brighter as sensor values rise. Light as information.</div>
-        <div class="what-tech">
-          <span class="tech-tag">Lumen GI</span>
-          <span class="tech-tag">Nanite</span>
-          <span class="tech-tag">Ray Tracing</span>
-          <span class="tech-tag">HDR</span>
-        </div>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-num">01 — RENDERING ENGINE</div>
+        <div class="platform-title">Lumen + Nanite
+at Full Fidelity</div>
+        <div class="platform-body">Physically accurate global illumination that responds to live data in real time. Infinite geometric detail with zero LOD management. The first platform to use Lumen as a data communication medium.</div>
+        <div class="platform-tags"><span>Lumen GI</span><span>Nanite</span><span>Ray Tracing</span><span>HDR</span></div>
       </div>
-      <div class="what-card reveal reveal-2">
-        <div class="what-num">02 — PARTICLE INTELLIGENCE</div>
-        <div class="what-title">Niagara<br>as Data Visualizer</div>
-        <div class="what-body">Niagara particle systems ingest live data streams — crowd flow, blood flow, atmospheric particulates, financial pressure — and express them as millions of physically simulated particles with full Lumen GI. Data you can inhabit, not read.</div>
-        <div class="what-tech">
-          <span class="tech-tag">Niagara</span>
-          <span class="tech-tag">GPU Particles</span>
-          <span class="tech-tag">Live Data</span>
-          <span class="tech-tag">Physics Sim</span>
-        </div>
+      <div class="platform-card">
+        <div class="platform-num">02 — PARTICLE INTELLIGENCE</div>
+        <div class="platform-title">Niagara
+as Data Visualizer</div>
+        <div class="platform-body">Niagara particle systems ingest live data streams — crowd flow, blood flow, atmospheric particulates — and express them as millions of physically simulated particles with full Lumen GI.</div>
+        <div class="platform-tags"><span>Niagara</span><span>GPU Particles</span><span>Live Data</span><span>Physics Sim</span></div>
       </div>
-      <div class="what-card reveal">
-        <div class="what-num">03 — DATA FABRIC</div>
-        <div class="what-title">Any Source.<br>Any Format.</div>
-        <div class="what-body">A Python ingestion service normalizes WebSocket, OSC, REST, MQTT, DICOM, SMPTE timecode, and serial streams into a single parameter bridge driving any UE5 system in real time. The protocol is invisible to your Blueprints. The data just flows.</div>
-        <div class="what-tech">
-          <span class="tech-tag">WebSocket</span>
-          <span class="tech-tag">OSC</span>
-          <span class="tech-tag">SMPTE</span>
-          <span class="tech-tag">DICOM</span>
-          <span class="tech-tag">MQTT</span>
-        </div>
+      <div class="platform-card">
+        <div class="platform-num">03 — DATA FABRIC</div>
+        <div class="platform-title">Any Source.
+Any Format.</div>
+        <div class="platform-body">A Python ingestion service normalizes WebSocket, OSC, REST, MQTT, DICOM, SMPTE timecode, and serial streams into a single parameter bridge driving any UE5 system in real time.</div>
+        <div class="platform-tags"><span>WebSocket</span><span>OSC</span><span>SMPTE</span><span>DICOM</span><span>MQTT</span></div>
       </div>
-      <div class="what-card reveal reveal-2">
-        <div class="what-num">04 — AI DIRECTOR</div>
-        <div class="what-title">Natural Language<br>Spatial Control</div>
-        <div class="what-body">Claude-powered AI Director interprets creative and operational intent in plain language. A film director says "make the reveal more dramatic." A surgeon says "highlight the margin." A mission controller says "abort waypoint 3." The platform executes.</div>
-        <div class="what-tech">
-          <span class="tech-tag">LLM</span>
-          <span class="tech-tag">Claude API</span>
-          <span class="tech-tag">NLP</span>
-          <span class="tech-tag">Real-Time</span>
-        </div>
+      <div class="platform-card">
+        <div class="platform-num">04 — AI DIRECTOR</div>
+        <div class="platform-title">Natural Language
+Spatial Control</div>
+        <div class="platform-body">Claude-powered AI Director interprets creative and operational intent in plain language. A film director says 'make the reveal more dramatic.' The platform executes.</div>
+        <div class="platform-tags"><span>LLM</span><span>Claude API</span><span>NLP</span><span>Real-Time</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- INDUSTRIES -->
-<section class="section-pad industries" id="industries">
-  <div class="container">
-    <div class="section-label reveal">Industries</div>
-    <h2 class="section-title reveal reveal-2">
-      One platform.<br>
-      <em>Every industry.</em>
-    </h2>
-    <p style="font-size:15px;color:var(--muted);max-width:560px;line-height:1.8;" class="reveal reveal-3">
-      The vocabulary reconfigures. The engine doesn't. A single JSON file transforms the entire interface — from concert stage to operating theater to mission control.
+<section class="section bg-deep" id="industries" style="border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border))">
+  <div class="section-inner">
+    <div class="section-label">Industries</div>
+    <h2 class="section-title">One platform.<br><em>Every industry.</em></h2>
+    <p class="section-desc">
+      The vocabulary reconfigures. The engine doesn't. A single JSON file
+      transforms the entire interface — from concert stage to operating
+      theater to mission control.
     </p>
-    <div class="industry-scroll reveal">
-      <div class="industry-card">
-        <div class="ind-icon">🎬</div>
-        <div class="ind-title">Virtual Production</div>
-        <div class="ind-body">LED volume control. SMPTE sync. Director-facing interface. Camera tracking parallax. The missing software layer for every Netflix, Amazon, and Disney stage.</div>
-      </div>
-      <div class="industry-card">
-        <div class="ind-icon">🎤</div>
-        <div class="ind-title">Live Events</div>
-        <div class="ind-body">Cue-driven show control. Multi-surface sync. Real-time Lumen GI. Proven at Sphere Las Vegas, Morgan Wallen world tour, and Deloitte global keynotes.</div>
-      </div>
-      <div class="industry-card">
-        <div class="ind-icon">🏛</div>
-        <div class="ind-title">Architecture</div>
-        <div class="ind-body">BIM-to-UE5 instant digital twins. Live sensor data — HVAC, occupancy, energy — rendered as physically accurate light and particle flow through real spaces.</div>
-      </div>
-      <div class="industry-card">
-        <div class="ind-icon">🏥</div>
-        <div class="ind-title">Surgical Navigation</div>
-        <div class="ind-body">DICOM imaging streams rendered in Nanite anatomy. Lumen subsurface scattering for tissue. Niagara blood flow visualization. The living 3D model beside the surgeon.</div>
-      </div>
-      <div class="industry-card">
-        <div class="ind-icon">🚀</div>
-        <div class="ind-title">Space Operations</div>
-        <div class="ind-body">Real-time rover telemetry in a physically accurate Mars environment. Battery depletion dims global Lumen lighting. Wind vector data drives Niagara dust simulation.</div>
-      </div>
-      <div class="industry-card">
-        <div class="ind-icon">🚨</div>
-        <div class="ind-title">Emergency Response</div>
-        <div class="ind-body">Building fire sensors drive zone heat visualization. Crowd flow as Niagara fluid dynamics. Incident commanders see in 3D — not on a 2D map — in real time.</div>
-      </div>
+    <div class="industries-strip">
+      <div class="industry-card"><div class="industry-icon">🎬</div><div class="industry-title">Virtual Production</div><div class="industry-body">LED volume control. SMPTE sync. Director-facing interface. Camera tracking parallax.</div></div>
+      <div class="industry-card"><div class="industry-icon">🎤</div><div class="industry-title">Live Events</div><div class="industry-body">Cue-driven show control. Multi-surface sync. Real-time Lumen GI. Proven at Sphere Las Vegas.</div></div>
+      <div class="industry-card"><div class="industry-icon">🏛</div><div class="industry-title">Architecture</div><div class="industry-body">BIM-to-UE5 instant digital twins. Live sensor data rendered as physically accurate light.</div></div>
+      <div class="industry-card"><div class="industry-icon">🏥</div><div class="industry-title">Surgical Navigation</div><div class="industry-body">DICOM imaging in Nanite anatomy. Lumen subsurface scattering for tissue visualization.</div></div>
+      <div class="industry-card"><div class="industry-icon">🚀</div><div class="industry-title">Space Operations</div><div class="industry-body">Real-time rover telemetry in physically accurate environments. Battery data dims lighting.</div></div>
+      <div class="industry-card"><div class="industry-icon">🚨</div><div class="industry-title">Emergency Response</div><div class="industry-body">Building fire sensors drive zone heat visualization. Crowd flow as fluid dynamics.</div></div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section class="section-pad" id="pricing">
-  <div class="container">
-    <div class="section-label reveal">Access Plans</div>
-    <h2 class="section-title reveal reveal-2">
-      Start free.<br>
-      <em>Scale to enterprise.</em>
-    </h2>
-    <p style="font-size:15px;color:var(--muted);max-width:560px;line-height:1.8;margin-bottom:16px;" class="reveal reveal-3">
-      Every tier runs the same core UE5 engine. What scales is the surface count, data ingestion, AI capability, and dedicated support.
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <div class="section-label">Access Plans</div>
+    <h2 class="section-title">Start free.<br><em>Scale to enterprise.</em></h2>
+    <p class="section-desc" style="margin-bottom:16px">
+      Every tier runs the same core UE5 engine. What scales is the surface
+      count, data ingestion, AI capability, and dedicated support.
     </p>
-
-    <div class="pricing-grid">
-
-      <!-- FREE -->
-      <div class="price-card reveal">
-        <div class="price-tier">Tier 00</div>
-        <div class="price-name">Explorer</div>
-        <div class="price-tagline">For developers, students, and independent artists exploring the platform.</div>
-        <div class="price-amount">
-          <span class="price-currency">$</span>
-          <span class="price-num">0</span>
-        </div>
-        <div class="price-period">Free forever</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>1 output surface</li>
-          <li>Pixel Streaming up to 720p</li>
-          <li>Data Fabric Plugin (WebSocket + OSC)</li>
-          <li>Blueprint control layer</li>
-          <li>Community Discord access</li>
-          <li>Fab marketplace access</li>
-          <li class="dim">AI Director</li>
-          <li class="dim">nDisplay multi-surface</li>
-          <li class="dim">SMPTE timecode sync</li>
-          <li class="dim">Priority support</li>
-        </ul>
-        <a href="#signup" class="btn-price btn-price-ghost">Get Started Free</a>
+    <div class="pricing-toggle">
+      <button class="toggle-label active" id="monthlyLabel" onclick="setYearly(false)">Monthly</button>
+      <div class="toggle-track" id="toggleTrack" onclick="setYearly(!window._yearly)">
+        <div class="toggle-thumb off" id="toggleThumb"></div>
       </div>
-
-      <!-- STUDIO -->
-      <div class="price-card featured reveal reveal-2">
-        <div class="price-tier">Tier 01</div>
-        <div class="price-name">Studio</div>
-        <div class="price-tagline">For production companies, boutique studios, and independent technical directors.</div>
-        <div class="price-amount">
-          <span class="price-currency">$</span>
-          <span class="price-num">299</span>
-        </div>
-        <div class="price-period">per month · billed annually</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Up to 6 output surfaces</li>
-          <li>Pixel Streaming 4K cloud delivery</li>
-          <li>Full Data Fabric (all protocols)</li>
-          <li>AI Director — 500 commands/mo</li>
-          <li>Vocabulary config system</li>
-          <li>nDisplay 2-node sync</li>
-          <li>SMPTE / LTC timecode integration</li>
-          <li>Show file versioning</li>
-          <li>Email support — 48hr response</li>
-          <li class="dim">Dedicated instance</li>
-        </ul>
-        <a href="#signup" class="btn-price btn-price-gold">Start Studio Trial</a>
-      </div>
-
-      <!-- PRODUCTION -->
-      <div class="price-card reveal reveal-3">
-        <div class="price-tier">Tier 02</div>
-        <div class="price-name">Production</div>
-        <div class="price-tagline">For AV companies, touring productions, and permanent installation operators.</div>
-        <div class="price-amount">
-          <span class="price-currency">$</span>
-          <span class="price-num">999</span>
-        </div>
-        <div class="price-period">per month · billed annually</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Unlimited output surfaces</li>
-          <li>Multi-cloud Pixel Streaming</li>
-          <li>AI Director — unlimited</li>
-          <li>nDisplay full cluster sync</li>
-          <li>Quadro Sync hardware genlock</li>
-          <li>Remote multi-user collaboration</li>
-          <li>Venue digital twin pipeline</li>
-          <li>Priority email + Slack support</li>
-          <li>Dedicated onboarding session</li>
-          <li>White-label option available</li>
-        </ul>
-        <a href="#signup" class="btn-price btn-price-dark">Start Production Trial</a>
-      </div>
-
-      <!-- ENTERPRISE -->
-      <div class="price-card reveal reveal-4">
-        <div class="price-tier">Tier 03</div>
-        <div class="price-name">Enterprise</div>
-        <div class="price-tagline">For studios, defense, medical institutions, and global event operators requiring dedicated infrastructure.</div>
-        <div class="price-amount">
-          <span class="price-currency"></span>
-          <span class="price-num" style="font-size:36px;padding-top:8px;">Custom</span>
-        </div>
-        <div class="price-period">annual contract · starting $50,000</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Dedicated cloud rendering instance</li>
-          <li>Custom vocabulary development</li>
-          <li>DICOM / defense data integration</li>
-          <li>On-premise deployment option</li>
-          <li>SLA — 99.9% uptime guaranteed</li>
-          <li>24/7 dedicated technical support</li>
-          <li>Source code access</li>
-          <li>Co-development roadmap input</li>
-          <li>Legal IP protection framework</li>
-          <li>Executive partnership relationship</li>
-        </ul>
-        <a href="#signup" class="btn-price btn-price-ghost" style="border-color:rgba(201,168,76,0.4);color:var(--gold);">Contact Enterprise Sales</a>
-      </div>
-
+      <button class="toggle-label inactive" id="yearlyLabel" onclick="setYearly(true)">Yearly <span class="save-badge">Save 15%</span></button>
     </div>
+    <div class="pricing-grid" id="pricingGrid"></div>
   </div>
 </section>
 
 <!-- INVESTOR -->
-<section class="section-pad investor" id="investors">
-  <div class="container">
-    <div class="section-label reveal">For Investors</div>
-    <h2 class="section-title reveal reveal-2">
-      The spatial layer<br>
-      <em>nobody has built.</em>
-    </h2>
-
+<section class="section bg-deep" id="about" style="border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border))">
+  <div class="section-inner">
+    <div class="section-label">For Investors</div>
+    <h2 class="section-title">The spatial layer<br><em>nobody has built.</em></h2>
     <div class="investor-grid">
-      <div class="investor-stats reveal">
-        <div class="inv-stat">
-          <div class="inv-num">$384B</div>
-          <div class="inv-label">Digital Twin Market by 2034 · 35% CAGR</div>
-        </div>
-        <div class="inv-stat">
-          <div class="inv-num">$16.7B</div>
-          <div class="inv-label">Virtual Production Market by 2035</div>
-        </div>
-        <div class="inv-stat">
-          <div class="inv-num">6%</div>
-          <div class="inv-label">Top 10 Players' Combined Market Share — Wide Open</div>
-        </div>
-        <div class="inv-stat">
-          <div class="inv-num">5</div>
-          <div class="inv-label">Industries Addressable with One Core Platform</div>
-        </div>
+      <div class="investor-stats">
+        <div class="investor-stat"><div class="investor-stat-num">$384B</div><div class="investor-stat-label">Digital Twin Market by 2034 · 35% CAGR</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">$16.7B</div><div class="investor-stat-label">Virtual Production Market by 2035</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">6%</div><div class="investor-stat-label">Top 10 Players' Combined Market Share</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">5</div><div class="investor-stat-label">Industries Addressable with One Platform</div></div>
       </div>
-
-      <div class="investor-text reveal reveal-2">
-        <p>Every industry that operates in physical space shares the same problem: the data that describes what is happening in that space lives in flat screens, disconnected from the 3D reality it represents.</p>
-        <p>GRIDtRAVELER Labs is building <strong>the first universal spatial intelligence platform</strong> — the infrastructure layer that makes any physical environment programmable, data-responsive, and AI-controlled in real time.</p>
-        <p>The platform is proven in the world's most technically demanding environments — Sphere Las Vegas, Morgan Wallen world tour, Volvo Group digital twins, Deloitte's 20,000-person global keynote. <strong>Live events are the R&D lab. Every other industry is the market.</strong></p>
-        <p>We are not competing with Disguise or Notch. We are the layer they run on top of. The company that owns the spatial operating layer owns the next decade of physical computing.</p>
-
+      <div>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          Every industry that operates in physical space shares the same
+          problem: the data that describes what is happening lives in flat
+          screens, disconnected from the 3D reality it represents.
+        </p>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          GRIDtRAVELER Labs is building <strong style="color:hsl(var(--foreground))">the first universal spatial intelligence platform</strong>
+          — the infrastructure layer that makes any physical environment
+          programmable, data-responsive, and AI-controlled in real time.
+        </p>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          The platform is proven in the world's most technically demanding
+          environments — Sphere Las Vegas, Morgan Wallen world tour, Volvo
+          Group digital twins. <strong style="color:hsl(var(--foreground))">Live events are the R&D lab. Every other industry is the market.</strong>
+        </p>
         <div class="gold-line"></div>
-
-        <div class="investor-cta">
-          <div class="inv-cta-label">Investor Inquiries</div>
-          <a href="/cdn-cgi/l/email-protection#2b4c59424f5f594a5d4e474e596b4c464a42470548444614585e49414e485f166c79626f5f796a7d6e676e790b674a49580bc9abbf0b62455d4e585f44590b62455a5e425952" class="btn-primary" style="display:inline-block;width:fit-content;padding:14px 32px;">Request Investor Deck →</a>
-          <p style="font-size:12px;color:var(--dim);margin-top:8px;font-family:var(--mono);letter-spacing:1px;">NDA available on request · Actively seeking strategic partners</p>
-        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));margin-bottom:16px">Investor Inquiries</div>
+        <a href="#contact" class="btn btn-gold">Request Investor Deck →</a>
+        <p style="font-size:12px;color:hsl(var(--dim));font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-top:12px">NDA available on request · Actively seeking strategic partners</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SIGNUP -->
-<section class="signup" id="signup">
-  <div class="signup-inner">
-    <div class="section-label reveal" style="justify-content:center;">Early Access</div>
-    <h2 class="signup-title reveal reveal-2">
-      Join the<br>
-      <em>spatial future.</em>
-    </h2>
-    <p class="signup-sub reveal reveal-3">
-      Request access to the GRIDtRAVELER platform. We onboard in cohorts — tell us your use case and we'll reach out within 48 hours.
+<section class="section bg-background" id="contact">
+  <div class="signup">
+    <div class="section-label" style="justify-content:center">Early Access</div>
+    <h2>Join the<br><em>spatial future.</em></h2>
+    <p class="section-desc" style="max-width:100%;text-align:center;margin-bottom:48px">
+      Request access to the GRIDtRAVELER platform. We onboard in cohorts —
+      tell us your use case and we'll reach out within 48 hours.
     </p>
-
-    <form class="reveal reveal-3" onsubmit="handleSubmit(event)">
+    <form onsubmit="event.preventDefault();this.innerHTML='<div style=\'border:1px solid hsl(var(--primary));padding:48px;background:hsl(var(--surface))\'><div style=\'font-size:36px;margin-bottom:20px\'>✦</div><div class=\'font-display\' style=\'font-size:36px;font-weight:300;color:hsl(var(--primary));margin-bottom:12px\'>Access Requested</div><p style=\'font-size:14px;color:hsl(var(--muted-foreground));line-height:1.7\'>You\'re in the queue. We review applications in cohorts and will reach out within 48 hours.</p></div>'">
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input class="form-input" type="text" placeholder="Andrey" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input class="form-input" type="text" placeholder="Shcherbinin" required>
-        </div>
+        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" placeholder="First name" required></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" placeholder="Last name" required></div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">Work Email</label>
-        <input class="form-input" type="email" placeholder="you@company.com" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Company / Studio</label>
-        <input class="form-input" type="text" placeholder="Your company name">
-      </div>
-
+      <div class="form-group"><label class="form-label">Work Email</label><input type="email" class="form-input" placeholder="you@company.com" required></div>
       <div class="form-group">
         <label class="form-label">Primary Use Case</label>
         <select class="form-select" required>
@@ -1419,76 +457,45 @@ nav .gt-logo-sub  { font-size: 11px; letter-spacing: 6px; margin-top: 1px; }
           <option>Virtual Film Production / LED Volume</option>
           <option>Live Events / Concert Production</option>
           <option>Architecture / Real Estate</option>
-          <option>Enterprise Visualization</option>
           <option>Surgical / Medical Navigation</option>
           <option>Space / Defense / Government</option>
-          <option>Emergency Response</option>
           <option>Independent Developer / Research</option>
           <option>Investor / Partnership Inquiry</option>
         </select>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">Plan Interest</label>
-        <select class="form-select" required>
-          <option value="" disabled selected>Select a plan</option>
-          <option>Explorer — Free</option>
-          <option>Studio — $299/mo</option>
-          <option>Production — $999/mo</option>
-          <option>Enterprise — Custom</option>
-          <option>Investor Deck Request</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Tell us about your project (optional)</label>
-        <textarea class="form-input" rows="3" placeholder="Describe your production, venue, or use case..." style="resize:vertical;min-height:90px;"></textarea>
-      </div>
-
-      <button type="submit" class="btn-submit">Request Access →</button>
+      <button type="submit" class="btn btn-gold btn-full" style="padding:16px;font-size:15px;font-weight:700;margin-top:8px">Request Access →</button>
       <p class="form-note">No spam. No sales calls unless you ask. Early access users shape the roadmap.</p>
     </form>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="#" class="gt-logo footer-gt-logo" style="text-decoration:none;margin-bottom:12px;">
-        <span class="gt-logo-main">GRIDtRAVELER</span>
-        <span class="gt-logo-sub">Labs</span>
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="nav-logo" style="margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <div class="nav-logo-box">GT</div>
+        <div class="nav-brand">GRID<span class="text-primary">t</span>RAVELER <span class="text-dim">LABS</span></div>
       </a>
-      <p>Real-time spatial intelligence built on Unreal Engine 5. Transforming physical environments across film, events, architecture, medicine, and space.</p>
+      <p class="footer-desc">Real-time spatial intelligence built on Unreal Engine 5. Transforming physical environments across film, events, architecture, medicine, and space.</p>
     </div>
     <div>
-      <div class="footer-col-title">Platform</div>
-      <ul class="footer-links">
-        <li><a href="#platform">Overview</a></li>
-        <li><a href="#industries">Industries</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#">Documentation</a></li>
-        <li><a href="https://github.com/gridtraveler" target="_blank">GitHub</a></li>
-      </ul>
+      <div class="footer-heading">Platform</div>
+      <div class="footer-links">
+        <a href="#platform">Products</a><a href="#industries">Services</a><a href="#pricing">Pricing</a><a href="#research">Research</a>
+      </div>
     </div>
     <div>
-      <div class="footer-col-title">Company</div>
-      <ul class="footer-links">
-        <li><a href="https://www.artstation.com/gridtraveler" target="_blank">Portfolio</a></li>
-        <li><a href="https://www.linkedin.com/in/gridtraveler/" target="_blank">LinkedIn</a></li>
-        <li><a href="#investors">Investors</a></li>
-        <li><a href="mailto:gridtraveler@gmail.com">Contact</a></li>
-      </ul>
+      <div class="footer-heading">Company</div>
+      <div class="footer-links">
+        <a href="#about">About</a><a href="#contact">Contact</a><a href="#">Case Studies</a><a href="#">Login</a>
+      </div>
     </div>
     <div>
-      <div class="footer-col-title">Built With</div>
-      <ul class="footer-links">
-        <li><a href="#">Unreal Engine 5</a></li>
-        <li><a href="#">Lumen · Nanite</a></li>
-        <li><a href="#">Niagara · nDisplay</a></li>
-        <li><a href="#">Pixel Streaming</a></li>
-        <li><a href="#">Claude AI</a></li>
-      </ul>
+      <div class="footer-heading">Built With</div>
+      <div class="footer-links">
+        <span>Unreal Engine 5</span><span>Lumen · Nanite</span><span>Niagara · nDisplay</span><span>Pixel Streaming</span><span>Claude AI</span>
+      </div>
     </div>
   </div>
   <div class="footer-bottom">
@@ -1497,54 +504,56 @@ nav .gt-logo-sub  { font-size: 11px; letter-spacing: 6px; margin-top: 1px; }
   </div>
 </footer>
 
-<!-- SUCCESS MODAL -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-icon">✦</div>
-    <div class="modal-title">Access Requested</div>
-    <p class="modal-body">
-      You're in the queue. We review applications in cohorts and will reach out within 48 hours.<br><br>
-      If you selected Enterprise or Investor, expect a direct message from the founder.
-    </p>
-  </div>
-</div>
-
 <script>
-// Scroll reveal
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if(e.isIntersecting) e.target.classList.add('visible');
-  });
-}, {threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window._yearly = false;
+var tiers = [
+  {tier:"Tier 00",name:"Explorer",tagline:"For developers, students, and independent artists exploring the platform.",monthly:0,yearly:0,period:"Free forever",features:[{t:"1 output surface",a:1},{t:"Pixel Streaming up to 720p",a:1},{t:"Data Fabric Plugin (WebSocket + OSC)",a:1},{t:"Blueprint control layer",a:1},{t:"Community Discord access",a:1},{t:"AI Director",a:0},{t:"nDisplay multi-surface",a:0},{t:"Priority support",a:0}],cta:"Get Started Free",btnClass:"btn-ghost-gold",featured:false},
+  {tier:"Tier 01",name:"Studio",tagline:"For production companies, boutique studios, and independent technical directors.",monthly:299,yearly:249,period:"per month",features:[{t:"Up to 6 output surfaces",a:1},{t:"Pixel Streaming 4K cloud delivery",a:1},{t:"Full Data Fabric (all protocols)",a:1},{t:"AI Director — 500 commands/mo",a:1},{t:"Vocabulary config system",a:1},{t:"nDisplay 2-node sync",a:1},{t:"SMPTE / LTC timecode integration",a:1},{t:"Email support — 48hr response",a:1}],cta:"Start Studio Trial",btnClass:"btn-gold",featured:true},
+  {tier:"Tier 02",name:"Production",tagline:"For AV companies, touring productions, and permanent installation operators.",monthly:999,yearly:849,period:"per month",features:[{t:"Unlimited output surfaces",a:1},{t:"Multi-cloud Pixel Streaming",a:1},{t:"AI Director — unlimited",a:1},{t:"nDisplay full cluster sync",a:1},{t:"Remote multi-user collaboration",a:1},{t:"Venue digital twin pipeline",a:1},{t:"Priority email + Slack support",a:1},{t:"White-label option available",a:1}],cta:"Start Production Trial",btnClass:"btn-outline",featured:false},
+  {tier:"Tier 03",name:"Enterprise",tagline:"For studios, defense, medical institutions, and global event operators.",monthly:-1,yearly:-1,period:"annual contract · starting $50,000",features:[{t:"Dedicated cloud rendering instance",a:1},{t:"Custom vocabulary development",a:1},{t:"DICOM / defense data integration",a:1},{t:"On-premise deployment option",a:1},{t:"SLA — 99.9% uptime guaranteed",a:1},{t:"24/7 dedicated technical support",a:1},{t:"Source code access",a:1},{t:"Executive partnership relationship",a:1}],cta:"Contact Enterprise Sales",btnClass:"btn-ghost-gold",featured:false}
+];
 
-// Form
-function handleSubmit(e) {
-  e.preventDefault();
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-document.getElementById('modal-overlay').addEventListener('click', function(e) {
-  if(e.target === this) closeModal();
-});
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') closeModal();
-});
-
-// Smooth nav
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const id = a.getAttribute('href').slice(1);
-    const el = document.getElementById(id);
-    if(el) {
-      e.preventDefault();
-      el.scrollIntoView({behavior:'smooth', block:'start'});
-    }
+function renderPricing(){
+  var g=document.getElementById('pricingGrid');
+  g.innerHTML='';
+  tiers.forEach(function(t){
+    var price=window._yearly?t.yearly:t.monthly;
+    var card=document.createElement('div');
+    card.className='pricing-card'+(t.featured?' featured':'');
+    var h='';
+    if(t.featured)h+='<div class="popular-badge">MOST POPULAR</div>';
+    h+='<div class="tier-label"'+(t.featured?' style="margin-top:20px"':'')+'>'+t.tier+'</div>';
+    h+='<div class="tier-name">'+t.name+'</div>';
+    h+='<div class="tier-tagline">'+t.tagline+'</div>';
+    h+='<div class="tier-price">';
+    if(price>=0){h+='<span class="tier-dollar">$</span><span class="tier-amount">'+price+'</span>';}
+    else{h+='<span class="tier-custom">Custom</span>';}
+    h+='</div>';
+    var periodText=price===0?'Free forever':t.period;
+    if(window._yearly&&t.yearly>0)periodText+=' · billed annually';
+    h+='<div class="tier-period">'+periodText+'</div>';
+    h+='<div class="tier-divider"></div>';
+    h+='<div class="tier-features">';
+    t.features.forEach(function(f){
+      h+='<div class="tier-feature '+(f.a?'active':'inactive')+'"><span class="arrow">→</span>'+f.t+'</div>';
+    });
+    h+='</div>';
+    h+='<a href="#contact" class="btn '+t.btnClass+' btn-full">'+t.cta+'</a>';
+    card.innerHTML=h;
+    g.appendChild(card);
   });
-});
+}
+
+function setYearly(v){
+  window._yearly=v;
+  document.getElementById('monthlyLabel').className='toggle-label '+(v?'inactive':'active');
+  document.getElementById('yearlyLabel').className='toggle-label '+(v?'active':'inactive');
+  document.getElementById('toggleTrack').className='toggle-track '+(v?'on':'');
+  document.getElementById('toggleThumb').className='toggle-thumb '+(v?'on':'off');
+  renderPricing();
+}
+
+renderPricing();
 </script>
 </body>
 </html>
