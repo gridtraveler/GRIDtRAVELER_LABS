@@ -268,6 +268,79 @@
   .btn-dl svg { width: 18px; height: 18px; fill: #080808; }
   .dl-info { margin-top: 20px; font-size: 9px; letter-spacing: 0.2em; color: rgba(107,107,107,0.7); }
 
+  /* Install steps */
+  .install-steps {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .install-steps-label {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: rgba(201,168,76,0.5);
+    margin-bottom: 20px;
+  }
+  .install-steps-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+  .install-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 130px;
+  }
+  .install-step-num {
+    width: 28px;
+    height: 28px;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .install-step-text {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--grey-light, #9A9A9A);
+    line-height: 1.6;
+    text-align: center;
+  }
+  .install-step-text code {
+    background: rgba(201,168,76,0.12);
+    color: var(--gold);
+    padding: 1px 5px;
+    font-size: 9px;
+    border: 1px solid rgba(201,168,76,0.2);
+    word-break: break-all;
+  }
+  .install-arrow {
+    color: rgba(201,168,76,0.3);
+    font-size: 16px;
+    padding: 0 8px;
+    padding-top: 6px;
+    flex-shrink: 0;
+  }
+  .install-note {
+    margin-top: 20px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(107,107,107,0.6);
+    line-height: 1.7;
+  }
+  @media (max-width: 600px) {
+    .install-steps-row { flex-direction: column; align-items: center; }
+    .install-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+
   /* Section label */
   .slabel {
     font-size: 9px;
@@ -455,7 +528,39 @@
       <svg viewBox="0 0 24 24"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
       DOWNLOAD SYL 1.0
     </a>
-    <div class="dl-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; EXTRACT AND RUN INSTALLER</div>
+    <div class="dl-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; WINDOWS 10 / 11 · 64-BIT</div>
+
+    <!-- 5-step install flow -->
+    <div class="install-steps">
+      <div class="install-steps-label">AFTER DOWNLOAD — 5 STEPS</div>
+      <div class="install-steps-row">
+        <div class="install-step">
+          <div class="install-step-num">1</div>
+          <div class="install-step-text">Extract the ZIP</div>
+        </div>
+        <div class="install-arrow">→</div>
+        <div class="install-step">
+          <div class="install-step-num">2</div>
+          <div class="install-step-text">Move <code>SYL</code> folder to <code>C:\SYL\</code></div>
+        </div>
+        <div class="install-arrow">→</div>
+        <div class="install-step">
+          <div class="install-step-num">3</div>
+          <div class="install-step-text">Open <code>C:\SYL\</code></div>
+        </div>
+        <div class="install-arrow">→</div>
+        <div class="install-step">
+          <div class="install-step-num">4</div>
+          <div class="install-step-text">Double-click <code>00_START_HERE .bat</code></div>
+        </div>
+        <div class="install-arrow">→</div>
+        <div class="install-step">
+          <div class="install-step-num">5</div>
+          <div class="install-step-text">SYL launches automatically</div>
+        </div>
+      </div>
+      <div class="install-note">First run requests Administrator permission once — this is expected and required.</div>
+    </div>
   </div>
 
   <!-- System Requirements -->
