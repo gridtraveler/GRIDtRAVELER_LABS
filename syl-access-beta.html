@@ -10,8 +10,6 @@
 <style>
   :root {
     --gold: #C9A84C;
-    --gold-dim: rgba(201,168,76,0.15);
-    --gold-glow: rgba(201,168,76,0.35);
     --white: #F0EDE8;
     --grey: #6B6B6B;
     --bg: #080808;
@@ -32,7 +30,6 @@
     overflow-x: hidden;
   }
 
-  /* Ambient grid background */
   body::before {
     content: '';
     position: fixed;
@@ -45,7 +42,6 @@
     z-index: 0;
   }
 
-  /* Vignette */
   body::after {
     content: '';
     position: fixed;
@@ -55,7 +51,7 @@
     z-index: 0;
   }
 
-  /* ─── LOGIN SCREEN ─── */
+  /* ─── LOGIN ─── */
   #login-screen {
     position: relative;
     z-index: 10;
@@ -69,14 +65,7 @@
     animation: fadeUp 0.8s ease both;
   }
 
-  #login-screen.hiding {
-    animation: fadeOut 0.5s ease forwards;
-  }
-
-  .logo-lockup {
-    text-align: center;
-    user-select: none;
-  }
+  #login-screen.hiding { animation: fadeOut 0.5s ease forwards; }
 
   .logo-main {
     font-family: 'Bebas Neue', sans-serif;
@@ -85,6 +74,7 @@
     color: var(--gold);
     line-height: 1;
     display: block;
+    text-align: center;
   }
 
   .logo-sub {
@@ -95,6 +85,7 @@
     opacity: 0.6;
     display: block;
     margin-top: 4px;
+    text-align: center;
   }
 
   .login-card {
@@ -105,12 +96,10 @@
     position: relative;
   }
 
-  /* Corner accents */
   .login-card::before, .login-card::after {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 20px; height: 20px;
     border-color: var(--gold);
     border-style: solid;
     opacity: 0.6;
@@ -119,30 +108,17 @@
   .login-card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
   .access-label {
-    font-family: 'Space Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.3em;
     color: var(--gold);
-    text-transform: uppercase;
     margin-bottom: 28px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
+  .access-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .access-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .input-group {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  .input-group input {
+  #password-input {
     width: 100%;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(201,168,76,0.25);
@@ -152,29 +128,26 @@
     letter-spacing: 0.15em;
     padding: 16px 20px;
     outline: none;
+    margin-bottom: 20px;
     transition: border-color 0.2s, box-shadow 0.2s;
     -webkit-text-security: disc;
+    display: block;
   }
 
-  .input-group input:focus {
+  #password-input:focus {
     border-color: var(--gold);
     box-shadow: 0 0 0 1px var(--gold), inset 0 0 20px rgba(201,168,76,0.04);
   }
 
-  .input-group input::placeholder {
-    color: rgba(240,237,232,0.2);
-    letter-spacing: 0.2em;
-  }
+  #password-input::placeholder { color: rgba(240,237,232,0.2); letter-spacing: 0.2em; }
 
   #error-msg {
     font-size: 10px;
     letter-spacing: 0.15em;
     color: #E05555;
     margin-bottom: 16px;
-    min-height: 14px;
     display: none;
   }
-
   #error-msg.visible { display: block; }
 
   .btn-access {
@@ -187,42 +160,27 @@
     padding: 16px;
     border: none;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    transition: background 0.2s, box-shadow 0.2s;
     position: relative;
     overflow: hidden;
   }
-
-  .btn-access:hover {
-    background: #D4B560;
-    box-shadow: 0 0 30px rgba(201,168,76,0.3);
-  }
-
-  .btn-access:active { transform: scale(0.99); }
-
-  .btn-access.loading::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    animation: shimmer 0.8s ease;
-  }
+  .btn-access:hover { background: #D4B560; box-shadow: 0 0 30px rgba(201,168,76,0.3); }
 
   .login-footer {
     font-size: 10px;
     letter-spacing: 0.15em;
     color: var(--grey);
     text-align: center;
-    line-height: 1.8;
   }
 
-  /* ─── PORTAL SCREEN ─── */
+  /* ─── PORTAL ─── */
   #portal-screen {
     display: none;
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 720px;
-    padding: 60px 40px 80px;
+    max-width: 800px;
+    padding: 60px 40px 100px;
   }
 
   #portal-screen.visible {
@@ -239,7 +197,7 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .portal-logo-main {
+  .p-logo-main {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 40px;
     letter-spacing: 0.12em;
@@ -247,7 +205,7 @@
     line-height: 1;
   }
 
-  .portal-logo-sub {
+  .p-logo-sub {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 14px;
     letter-spacing: 0.45em;
@@ -261,16 +219,12 @@
     font-size: 10px;
     letter-spacing: 0.15em;
     color: var(--grey);
-    line-height: 2;
+    line-height: 2.2;
   }
+  .portal-meta .ver { color: var(--gold); font-weight: 700; }
 
-  .portal-meta .version {
-    color: var(--gold);
-    font-weight: 700;
-  }
-
-  /* Hero download zone */
-  .download-zone {
+  /* Download zone */
+  .dl-zone {
     background: var(--surface);
     border: 1px solid var(--border);
     padding: 50px 40px;
@@ -279,46 +233,28 @@
     position: relative;
     overflow: hidden;
   }
-
-  .download-zone::before {
+  .dl-zone::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
+    top: 0; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
-
-  .download-zone-eyebrow {
-    font-size: 9px;
-    letter-spacing: 0.35em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .download-zone-title {
+  .dl-eyebrow { font-size: 9px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 16px; }
+  .dl-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 72px;
     letter-spacing: 0.08em;
-    line-height: 1;
     color: var(--white);
-    margin-bottom: 10px;
+    line-height: 1;
+    margin-bottom: 12px;
   }
+  .dl-title span { color: var(--gold); }
+  .dl-desc { font-size: 11px; letter-spacing: 0.12em; color: var(--grey); margin-bottom: 36px; line-height: 1.9; }
 
-  .download-zone-title span { color: var(--gold); }
-
-  .download-zone-desc {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--grey);
-    margin-bottom: 36px;
-    line-height: 1.8;
-  }
-
-  .btn-download {
+  .btn-dl {
     display: inline-flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     background: var(--gold);
     color: #080808;
     font-family: 'Bebas Neue', sans-serif;
@@ -326,136 +262,108 @@
     letter-spacing: 0.2em;
     padding: 18px 48px;
     text-decoration: none;
-    border: none;
-    cursor: pointer;
     transition: all 0.2s;
-    position: relative;
   }
+  .btn-dl:hover { background: #D4B560; box-shadow: 0 0 50px rgba(201,168,76,0.4); transform: translateY(-1px); }
+  .btn-dl svg { width: 18px; height: 18px; fill: #080808; }
+  .dl-info { margin-top: 20px; font-size: 9px; letter-spacing: 0.2em; color: rgba(107,107,107,0.7); }
 
-  .btn-download:hover {
-    background: #D4B560;
-    box-shadow: 0 0 50px rgba(201,168,76,0.4);
-    transform: translateY(-1px);
-  }
-
-  .btn-download svg {
-    width: 18px;
-    height: 18px;
-    fill: #080808;
-  }
-
-  .file-info {
-    margin-top: 20px;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: rgba(107,107,107,0.7);
-  }
-
-  /* ─── ONBOARDING ─── */
-  .section-label {
+  /* Section label */
+  .slabel {
     font-size: 9px;
     letter-spacing: 0.35em;
     color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
     gap: 12px;
   }
+  .slabel::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-bottom: 60px;
-  }
-
-  .step {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    gap: 0 24px;
-    padding: 28px 0;
-    border-bottom: 1px solid rgba(201,168,76,0.08);
-    position: relative;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  .step:nth-child(1) { animation-delay: 0.1s; }
-  .step:nth-child(2) { animation-delay: 0.2s; }
-  .step:nth-child(3) { animation-delay: 0.3s; }
-  .step:nth-child(4) { animation-delay: 0.4s; }
-  .step:nth-child(5) { animation-delay: 0.5s; }
-
-  .step-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    color: var(--gold);
-    opacity: 0.25;
-    line-height: 1;
-    padding-top: 2px;
-  }
-
-  .step-content {}
-
-  .step-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.1em;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .step-body {
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--grey);
-    line-height: 1.9;
-  }
-
-  .step-body code {
-    background: rgba(201,168,76,0.1);
-    color: var(--gold);
-    padding: 2px 6px;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-  }
-
-  /* Requirements grid */
+  /* Requirements */
   .req-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1px;
     background: var(--border);
-    margin-bottom: 60px;
     border: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+  .req-cell { background: var(--surface); padding: 20px 24px; }
+  .req-label { font-size: 9px; letter-spacing: 0.3em; color: var(--gold); margin-bottom: 8px; }
+  .req-value { font-size: 12px; letter-spacing: 0.05em; color: var(--white); opacity: 0.8; line-height: 1.7; }
+
+  /* Steps */
+  .steps { margin-bottom: 60px; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 0 24px;
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
   }
 
-  .req-cell {
-    background: var(--surface);
-    padding: 20px 24px;
-  }
-
-  .req-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
+  .snum {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
     color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 6px;
+    opacity: 0.22;
+    line-height: 1;
+    padding-top: 3px;
   }
 
-  .req-value {
-    font-size: 12px;
-    letter-spacing: 0.08em;
+  .stitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
     color: var(--white);
-    opacity: 0.8;
+    margin-bottom: 12px;
   }
+
+  .sbody {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--grey);
+    line-height: 2.1;
+  }
+  .sbody code {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    padding: 2px 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+  }
+  .sbody strong { color: var(--white); }
+
+  /* UI table */
+  .ui-table { width: 100%; border-collapse: collapse; margin-bottom: 60px; font-size: 11px; }
+  .ui-table tr { border-bottom: 1px solid rgba(201,168,76,0.07); }
+  .ui-table tr:last-child { border-bottom: none; }
+  .ui-table td { padding: 15px 16px; vertical-align: top; line-height: 1.8; letter-spacing: 0.05em; }
+  .ui-table td:first-child {
+    width: 155px;
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    background: rgba(201,168,76,0.04);
+    border-right: 1px solid rgba(201,168,76,0.1);
+  }
+  .ui-table td:last-child { color: var(--grey); }
+
+  /* Disabled box */
+  .dis-box {
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(201,168,76,0.03);
+    padding: 24px 28px;
+    margin-bottom: 60px;
+    display: flex;
+    gap: 20px;
+  }
+  .dis-tag { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: var(--gold); opacity: 0.5; white-space: nowrap; padding-top: 2px; }
+  .dis-body { font-size: 11px; letter-spacing: 0.05em; color: var(--grey); line-height: 2; }
+  .dis-body strong { color: var(--white); }
 
   /* Contact */
   .contact-bar {
@@ -466,160 +374,108 @@
     border: 1px solid var(--border);
     gap: 20px;
   }
+  .c-label { font-size: 9px; letter-spacing: 0.3em; color: var(--grey); }
+  .c-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.1em; color: var(--white); margin-top: 4px; }
+  .c-links { display: flex; gap: 20px; align-items: center; }
+  .c-link { font-size: 10px; letter-spacing: 0.15em; color: var(--gold); text-decoration: none; transition: opacity 0.2s; }
+  .c-link:hover { opacity: 0.7; }
+  .cdiv { width: 1px; height: 16px; background: var(--border); }
 
-  .contact-bar-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    color: var(--grey);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .contact-bar-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 0.1em;
-    color: var(--white);
-  }
-
-  .contact-bar-links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-  }
-
-  .contact-link {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--gold);
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-
-  .contact-link:hover { opacity: 0.7; }
-
-  .divider { width: 1px; height: 16px; background: var(--border); }
-
-  /* ─── ANIMATIONS ─── */
+  /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-
   @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
+    from { opacity: 1; }
     to   { opacity: 0; transform: translateY(-20px); }
   }
 
-  @keyframes shimmer {
-    from { transform: translateX(-100%); }
-    to   { transform: translateX(100%); }
-  }
-
-  /* ─── RESPONSIVE ─── */
   @media (max-width: 600px) {
-    #login-screen { padding: 40px 24px; }
-    .login-card { padding: 28px 24px; }
-    .portal-header { flex-direction: column; gap: 20px; }
+    #login-screen { padding: 40px 20px; }
+    .login-card { padding: 28px 20px; }
+    #portal-screen { padding: 40px 20px 60px; }
+    .portal-header { flex-direction: column; gap: 16px; }
     .portal-meta { text-align: left; }
-    .download-zone { padding: 36px 24px; }
-    .download-zone-title { font-size: 52px; }
+    .dl-zone { padding: 36px 20px; }
+    .dl-title { font-size: 48px; }
     .req-grid { grid-template-columns: 1fr; }
     .contact-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
-    #portal-screen { padding: 40px 24px 60px; }
+    .ui-table td:first-child { width: 110px; font-size: 9px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<!-- ═══ LOGIN ═══ -->
 <div id="login-screen">
-
-  <div class="logo-lockup">
+  <div>
     <span class="logo-main">GRIDtRAVELER</span>
     <span class="logo-sub">Labs</span>
   </div>
 
   <div class="login-card">
     <div class="access-label">Client Access</div>
-
-    <div class="input-group">
-      <input
-        type="password"
-        id="password-input"
-        placeholder="ACCESS CODE"
-        autocomplete="off"
-        spellcheck="false"
-      />
-    </div>
-
+    <input type="password" id="password-input" placeholder="ACCESS CODE" autocomplete="off" spellcheck="false" />
     <div id="error-msg">— INVALID ACCESS CODE</div>
-
-    <button class="btn-access" id="login-btn" onclick="attemptLogin()">
-      ENTER
-    </button>
+    <button class="btn-access" id="login-btn" onclick="attemptLogin()">ENTER</button>
   </div>
 
-  <div class="login-footer">
-    GRIDTRAVELERLABS.COM &nbsp;·&nbsp; CONFIDENTIAL
-  </div>
-
+  <div class="login-footer">GRIDTRAVELERLABS.COM &nbsp;·&nbsp; CONFIDENTIAL</div>
 </div>
 
 
-<!-- ═══════════════ PORTAL SCREEN ═══════════════ -->
+<!-- ═══ PORTAL ═══ -->
 <div id="portal-screen">
 
-  <!-- Header -->
   <div class="portal-header">
     <div>
-      <div class="portal-logo-main">GRIDtRAVELER</div>
-      <div class="portal-logo-sub">Labs</div>
+      <div class="p-logo-main">GRIDtRAVELER</div>
+      <div class="p-logo-sub">Labs</div>
     </div>
     <div class="portal-meta">
-      <div class="version">SYL 1.0</div>
+      <div class="ver">SYL 1.0</div>
       <div>VERSION 1.0.0</div>
-      <div>RELEASED — APRIL 2026</div>
-      <div style="margin-top:8px;color:rgba(201,168,76,0.4);">BETA BUILD</div>
+      <div>APRIL 2026</div>
+      <div style="margin-top:8px;color:rgba(201,168,76,0.35);">BETA BUILD · CONFIDENTIAL</div>
     </div>
   </div>
 
-  <!-- Download Zone -->
-  <div class="download-zone">
-    <div class="download-zone-eyebrow">Your build is ready</div>
-    <div class="download-zone-title"><span>SYL</span> 1.0</div>
-    <div class="download-zone-desc">
+  <!-- Download -->
+  <div class="dl-zone">
+    <div class="dl-eyebrow">Your build is ready</div>
+    <div class="dl-title"><span>SYL</span> 1.0</div>
+    <div class="dl-desc">
       Real-time spatial intelligence platform<br>
-      Packaged for Windows 10/11 · UE5 Runtime Included
+      Windows 10 / 11 · UE5 Runtime included · All dependencies bundled
     </div>
-    <!-- ↓ REPLACE href WITH YOUR ACTUAL DOWNLOAD LINK (Google Drive, Dropbox, etc.) -->
-    <a class="btn-download" href="https://drive.google.com/file/d/1TuYxHRz85hWh39cwDAhdIy0U8EVwO1zc/view?usp=drive_link" target="_blank">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/>
-      </svg>
+    <a class="btn-dl"
+       href="https://drive.google.com/uc?export=download&id=1TuYxHRz85hWh39cwDAhdIy0U8EVwO1zc"
+       target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
       DOWNLOAD SYL 1.0
     </a>
-    <div class="file-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; INSTALLER INCLUDED</div>
+    <div class="dl-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; EXTRACT AND RUN INSTALLER</div>
   </div>
 
   <!-- System Requirements -->
-  <div class="section-label">System Requirements</div>
-  <div class="req-grid" style="margin-bottom:60px;">
+  <div class="slabel">System Requirements</div>
+  <div class="req-grid">
     <div class="req-cell">
       <div class="req-label">Operating System</div>
       <div class="req-value">Windows 10 / 11 (64-bit)</div>
     </div>
     <div class="req-cell">
       <div class="req-label">GPU</div>
-      <div class="req-value">NVIDIA RTX 2070 or higher</div>
+      <div class="req-value">NVIDIA RTX 3080 minimum<br>RTX 4080 / 4090 recommended</div>
     </div>
     <div class="req-cell">
       <div class="req-label">RAM</div>
-      <div class="req-value">16 GB minimum / 32 GB recommended</div>
+      <div class="req-value">32 GB minimum<br>64 GB recommended</div>
     </div>
     <div class="req-cell">
       <div class="req-label">Storage</div>
-      <div class="req-value">D:\ drive with show assets folder</div>
+      <div class="req-value">Install anywhere on your machine.<br>Show folder can live on any drive.</div>
     </div>
     <div class="req-cell">
       <div class="req-label">Network Ports</div>
@@ -627,139 +483,193 @@
     </div>
     <div class="req-cell">
       <div class="req-label">Display</div>
-      <div class="req-value">1920×1080 minimum · HDR supported</div>
+      <div class="req-value">1920×1080 minimum<br>4K recommended for optimal output</div>
     </div>
   </div>
 
-  <!-- First Launch Steps -->
-  <div class="section-label">First Launch</div>
+  <!-- Setup Steps -->
+  <div class="slabel">Setup &amp; First Launch</div>
   <div class="steps">
 
     <div class="step">
-      <div class="step-number">01</div>
-      <div class="step-content">
-        <div class="step-title">Extract & Place</div>
-        <div class="step-body">
-          Extract the ZIP. Copy the <code>SYL</code> folder to <code>C:\SYL\</code>
-          and create your show folder at <code>D:\MyShow\</code>.
-          Place your video assets (MP4/MOV) inside <code>D:\MyShow\</code>.
+      <div class="snum">01</div>
+      <div>
+        <div class="stitle">Extract the ZIP</div>
+        <div class="sbody">
+          Extract the ZIP to any location — desktop, external drive, project folder, anywhere you prefer.
+          The <code>SYL</code> folder contains everything needed. Do not rename or relocate files inside it.
         </div>
       </div>
     </div>
 
     <div class="step">
-      <div class="step-number">02</div>
-      <div class="step-content">
-        <div class="step-title">Run SYL_Control.exe</div>
-        <div class="step-body">
-          Launch <code>SYL_Control.exe</code> first — this scans your show folder,
-          generates the asset manifest, and starts the control server.
-          A browser tab will open automatically with the control surface.
+      <div class="snum">02</div>
+      <div>
+        <div class="stitle">Install Dependencies (Once)</div>
+        <div class="sbody">
+          Open the <code>SYL</code> folder. <strong>Right-click</strong> <code>01_INSTALL_FIRST.bat</code> → <strong>Run as Administrator</strong>.
+          This installs Python, required packages, and configures the control server.
+          A terminal window opens and closes automatically when complete. This step only needs to be done once.
         </div>
       </div>
     </div>
 
     <div class="step">
-      <div class="step-number">03</div>
-      <div class="step-content">
-        <div class="step-title">Launch the Engine</div>
-        <div class="step-body">
-          From the control surface (or directly), launch <code>SYL.exe</code>.
-          The engine will initialize and your LED wall outputs will go live.
-          Allow 30–60 seconds for full startup on first run.
+      <div class="snum">03</div>
+      <div>
+        <div class="stitle">Your Media Folder</div>
+        <div class="sbody">
+          Inside the <code>SYL</code> folder you'll find two show folders:<br><br>
+          <strong>SHOW_FOLDER_MASTERMEDIAFOLDER</strong> — pre-configured and ready to use immediately.
+          Drop your <strong>MP4 or MOV</strong> files directly into it and you're set.<br><br>
+          <strong>SHOW_FOLDER_TEMPLATE</strong> — an empty template for future shows.
+          When you're comfortable with the workflow, copy this template to any location on your machine,
+          fill it with your media files, then point SYL to it using the folder selector at startup.
+          Your show folder can live on any drive.
         </div>
       </div>
     </div>
 
     <div class="step">
-      <div class="step-number">04</div>
-      <div class="step-content">
-        <div class="step-title">Load Your Show</div>
-        <div class="step-body">
-          In the control surface, select your show file. Assets populate automatically.
-          Assign clips to Wall A / B / C using the cue slots (1–4).
-          Arm a cue, then fire — your walls respond instantly.
+      <div class="snum">04</div>
+      <div>
+        <div class="stitle">Launch SYL</div>
+        <div class="sbody">
+          Double-click <code>02_START_SYL.bat</code>. The control surface opens automatically in your browser
+          and the SYL engine starts. Allow <strong>60–90 seconds</strong> for the engine to fully initialize on first run.
+          Do not close the terminal window that appears — it keeps the system running.
+          Your show folder is scanned automatically and assets appear in the Media Browser.
         </div>
       </div>
     </div>
 
     <div class="step">
-      <div class="step-number">05</div>
-      <div class="step-content">
-        <div class="step-title">You're Live</div>
-        <div class="step-body">
-          All cues, snapshots, and wall assignments persist between sessions.
-          The AI Director is available for natural language control via the chat panel.
-          OSC commands are received on port <code>8000</code> from your existing show control rig.
+      <div class="snum">05</div>
+      <div>
+        <div class="stitle">Operating SYL</div>
+        <div class="sbody">
+          <strong>Media Browser</strong> — Your video assets load as thumbnails. Click any clip to select it.<br><br>
+
+          <strong>Assign to Surfaces</strong> — SYL drives three surfaces: <code>L</code> · <code>M</code> · <code>R</code> (Left, Main, Right).
+          With a clip selected, click the surface button to assign. Each surface is independent.<br><br>
+
+          <strong>Cues 1–4</strong> — Select a cue slot and assign clips to any combination of surfaces.
+          Press <strong>ARM</strong> to prepare the cue silently — nothing changes on output until you fire.
+          Press <strong>FIRE</strong> to execute. All assigned surfaces cut simultaneously.
+          Cue assignments are saved automatically between sessions.<br><br>
+
+          <strong>Presets P1–P4</strong> — Store and recall full surface states instantly.
+          Press a preset slot to write your current surface configuration to it.
+          Press it again any time to restore that state. Use for fast scene switching mid-show.<br><br>
+
+          <strong>Audio / Dropboard</strong> — Drag a <strong>WAV</strong> file directly onto the Dropboard panel,
+          or use the file picker. Play, pause, and level control are available in the panel.
+          Audio runs independently of the video surfaces.<br><br>
+
+          <strong>REC</strong> — Press to start recording the current SYL output.
+          Press again to stop. Recordings are saved as timestamped MP4 files in the
+          <code>logs</code> folder inside your SYL directory. Open that folder to retrieve them.
         </div>
       </div>
     </div>
 
   </div>
 
+  <!-- Interface Reference -->
+  <div class="slabel">Interface Reference</div>
+  <table class="ui-table">
+    <tr>
+      <td>MEDIA BROWSER</td>
+      <td>Displays all video assets from your active show folder as thumbnails. Click to select a clip before assigning or previewing.</td>
+    </tr>
+    <tr>
+      <td>SURFACE L / M / R</td>
+      <td>Left, Main, and Right LED wall outputs. Each surface is independently assigned and can run different content simultaneously.</td>
+    </tr>
+    <tr>
+      <td>CUE 1 – 4</td>
+      <td>Four programmable cue slots. Each stores a complete surface assignment. ARM prepares silently. FIRE executes the cut live.</td>
+    </tr>
+    <tr>
+      <td>PRESET P1 – P4</td>
+      <td>Full-state snapshots. Saves and recalls your entire surface layout instantly. Designed for fast live scene switching.</td>
+    </tr>
+    <tr>
+      <td>DROPBOARD / AUDIO</td>
+      <td>WAV audio playback. Drag files directly onto the panel. Independent volume, play, and pause controls.</td>
+    </tr>
+    <tr>
+      <td>REC</td>
+      <td>Records current SYL output to MP4. Files are saved to the <code>logs</code> folder with a timestamp filename. Press once to start, again to stop.</td>
+    </tr>
+    <tr>
+      <td>SAVE</td>
+      <td>Writes current cue and surface state to your show file. Sessions also auto-save on clean exit.</td>
+    </tr>
+  </table>
+
+  <!-- Disabled Features -->
+  <div class="slabel">Available Services</div>
+  <div class="dis-box">
+    <div class="dis-tag">— NOTE</div>
+    <div class="dis-body">
+      The following services are <strong>available but not active</strong> in this build:
+      <strong>AI Director</strong> (natural language show control),
+      <strong>Voice Control</strong>,
+      <strong>Pixel Streaming</strong> (remote browser access), and
+      <strong>Remote Control</strong> (tablet and mobile surface).<br><br>
+      Contact <strong>GRIDtRAVELER Labs</strong> to activate any of these for your specific workflow and setup.
+    </div>
+  </div>
+
   <!-- Contact -->
-  <div class="section-label">Direct Line</div>
+  <div class="slabel">Direct Line</div>
   <div class="contact-bar">
     <div>
-      <div class="contact-bar-label">Your GRIDtRAVELER Contact</div>
-      <!-- ↓ REPLACE WITH YOUR NAME -->
-      <div class="contact-bar-name">GRIDTRAVELER LABS</div>
+      <div class="c-label">Your GRIDtRAVELER Contact</div>
+      <div class="c-name">GRIDTRAVELER LABS</div>
     </div>
-    <div class="contact-bar-links">
-      <!-- ↓ REPLACE WITH YOUR EMAIL -->
-      <a class="contact-link" href="mailto:gridtraveler@gmail.com">gridtraveler@gmail.com</a>
-      <div class="divider"></div>
-      <a class="contact-link" href="https://gridtravelerlabs.com" target="_blank">gridtravelerlabs.com</a>
+    <div class="c-links">
+      <a class="c-link" href="mailto:gridtraveler@gmail.com">gridtraveler@gmail.com</a>
+      <div class="cdiv"></div>
+      <a class="c-link" href="https://gridtravelerlabs.com" target="_blank">gridtravelerlabs.com</a>
     </div>
   </div>
 
 </div>
 
-
 <script>
-  // ─── CHANGE THIS PASSWORD ───────────────────────────────
+  // ─── SET YOUR ACCESS CODE HERE ───────────────────────
   const ACCESS_CODE = "SYL2026";
-  // ────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────
 
   const input = document.getElementById('password-input');
   const errorMsg = document.getElementById('error-msg');
   const loginBtn = document.getElementById('login-btn');
 
-  // Allow Enter key
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') attemptLogin();
-  });
-
-  // Clear error on typing
-  input.addEventListener('input', function() {
-    errorMsg.classList.remove('visible');
-  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+  input.addEventListener('input', () => errorMsg.classList.remove('visible'));
 
   function attemptLogin() {
-    const val = input.value.trim();
-
-    if (val === ACCESS_CODE) {
-      loginBtn.classList.add('loading');
-      loginBtn.textContent = 'VERIFIED';
-
-      const loginScreen = document.getElementById('login-screen');
-      loginScreen.classList.add('hiding');
-
+    if (input.value.trim() === ACCESS_CODE) {
+      loginBtn.textContent = 'VERIFIED ✓';
+      document.getElementById('login-screen').classList.add('hiding');
       setTimeout(() => {
-        loginScreen.style.display = 'none';
-        const portal = document.getElementById('portal-screen');
-        portal.classList.add('visible');
+        document.getElementById('login-screen').style.display = 'none';
+        const p = document.getElementById('portal-screen');
+        p.classList.add('visible');
+        p.scrollIntoView({ behavior: 'smooth' });
       }, 500);
-
     } else {
       errorMsg.classList.add('visible');
       input.value = '';
       input.focus();
-      // Shake effect
-      input.style.transform = 'translateX(-6px)';
-      setTimeout(() => input.style.transform = 'translateX(6px)', 80);
-      setTimeout(() => input.style.transform = 'translateX(-4px)', 160);
-      setTimeout(() => input.style.transform = 'translateX(0)', 240);
+      let x = -6;
+      const shake = setInterval(() => {
+        input.style.transform = `translateX(${x}px)`;
+        x = x === -6 ? 6 : x === 6 ? -4 : x === -4 ? 4 : 0;
+        if (x === 0) { clearInterval(shake); input.style.transform = ''; }
+      }, 80);
     }
   }
 </script>
