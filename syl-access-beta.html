@@ -267,79 +267,7 @@
   .btn-dl:hover { background: #D4B560; box-shadow: 0 0 50px rgba(201,168,76,0.4); transform: translateY(-1px); }
   .btn-dl svg { width: 18px; height: 18px; fill: #080808; }
   .dl-info { margin-top: 20px; font-size: 9px; letter-spacing: 0.2em; color: rgba(107,107,107,0.7); }
-
-  /* Install steps */
-  .install-steps {
-    margin-top: 36px;
-    padding-top: 28px;
-    border-top: 1px solid rgba(201,168,76,0.15);
-  }
-  .install-steps-label {
-    font-size: 9px;
-    letter-spacing: 0.4em;
-    color: rgba(201,168,76,0.5);
-    margin-bottom: 20px;
-  }
-  .install-steps-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0;
-    flex-wrap: wrap;
-    row-gap: 16px;
-  }
-  .install-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    max-width: 130px;
-  }
-  .install-step-num {
-    width: 28px;
-    height: 28px;
-    background: var(--gold);
-    color: #080808;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .install-step-text {
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: var(--grey-light, #9A9A9A);
-    line-height: 1.6;
-    text-align: center;
-  }
-  .install-step-text code {
-    background: rgba(201,168,76,0.12);
-    color: var(--gold);
-    padding: 1px 5px;
-    font-size: 9px;
-    border: 1px solid rgba(201,168,76,0.2);
-    word-break: break-all;
-  }
-  .install-arrow {
-    color: rgba(201,168,76,0.3);
-    font-size: 16px;
-    padding: 0 8px;
-    padding-top: 6px;
-    flex-shrink: 0;
-  }
-  .install-note {
-    margin-top: 20px;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: rgba(107,107,107,0.6);
-    line-height: 1.7;
-  }
-  @media (max-width: 600px) {
-    .install-steps-row { flex-direction: column; align-items: center; }
-    .install-arrow { transform: rotate(90deg); padding: 4px 0; }
-  }
+  .dl-check { margin-top: 10px; font-size: 10px; letter-spacing: 0.08em; line-height: 1.7; color: rgba(240,237,232,0.55); }
 
   /* Section label */
   .slabel {
@@ -510,7 +438,7 @@
       <div class="ver">SYL 1.0</div>
       <div>VERSION 1.0.0</div>
       <div>APRIL 2026</div>
-      <div style="margin-top:8px;color:rgba(201,168,76,0.35);">BETA BUILD · CONFIDENTIAL</div>
+      <div style="margin-top:8px;color:rgba(201,168,76,0.35);">LICENSED EVALUATION BUILD · CONFIDENTIAL</div>
     </div>
   </div>
 
@@ -528,39 +456,8 @@
       <svg viewBox="0 0 24 24"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
       DOWNLOAD SYL 1.0
     </a>
-    <div class="dl-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; WINDOWS 10 / 11 · 64-BIT</div>
-
-    <!-- 5-step install flow -->
-    <div class="install-steps">
-      <div class="install-steps-label">AFTER DOWNLOAD — 5 STEPS</div>
-      <div class="install-steps-row">
-        <div class="install-step">
-          <div class="install-step-num">1</div>
-          <div class="install-step-text">Extract the ZIP</div>
-        </div>
-        <div class="install-arrow">→</div>
-        <div class="install-step">
-          <div class="install-step-num">2</div>
-          <div class="install-step-text">Move <code>SYL</code> folder to <code>C:\SYL\</code></div>
-        </div>
-        <div class="install-arrow">→</div>
-        <div class="install-step">
-          <div class="install-step-num">3</div>
-          <div class="install-step-text">Open <code>C:\SYL\</code></div>
-        </div>
-        <div class="install-arrow">→</div>
-        <div class="install-step">
-          <div class="install-step-num">4</div>
-          <div class="install-step-text">Double-click <code>00_START_HERE .bat</code></div>
-        </div>
-        <div class="install-arrow">→</div>
-        <div class="install-step">
-          <div class="install-step-num">5</div>
-          <div class="install-step-text">SYL launches automatically</div>
-        </div>
-      </div>
-      <div class="install-note">First run requests Administrator permission once — this is expected and required.</div>
-    </div>
+    <div class="dl-info">SYL_1.0_WIN64.zip &nbsp;·&nbsp; 3.2 GB &nbsp;·&nbsp; LICENSED EVALUATION BUILD</div>
+    <div class="dl-check">Before installing, confirm the downloaded ZIP matches the stated file size. If the file is smaller, restart the download.</div>
   </div>
 
   <!-- System Requirements -->
@@ -580,7 +477,7 @@
     </div>
     <div class="req-cell">
       <div class="req-label">Storage</div>
-      <div class="req-value">Install anywhere on your machine.<br>Show folder can live on any drive.</div>
+      <div class="req-value">Runtime folder must be placed at <code>C:\SYL\</code>.<br>Show folders can live on any drive.</div>
     </div>
     <div class="req-cell">
       <div class="req-label">Network Ports</div>
@@ -592,98 +489,22 @@
     </div>
   </div>
 
-  <!-- Setup Steps -->
-  <div class="slabel">Setup &amp; First Launch</div>
-  <div class="steps">
-
-    <div class="step">
-      <div class="snum">01</div>
-      <div>
-        <div class="stitle">Extract &amp; Place at C:\SYL\</div>
-        <div class="sbody">
-          Extract the ZIP, then move the <code>SYL</code> folder to your <strong>C:\ drive root</strong>.<br><br>
-          The final path must be exactly: <code>C:\SYL\</code><br><br>
-          Confirm it looks like this before continuing:<br>
-          <code>C:\SYL\01_INSTALL_FIRST.bat</code><br>
-          <code>C:\SYL\02_START_SYL.bat</code><br><br>
-          <strong>Do not place it on the Desktop, Documents, or any subfolder.</strong>
-          The system will not launch from any other location.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="snum">02</div>
-      <div>
-        <div class="stitle">Install Dependencies (Once)</div>
-        <div class="sbody">
-          Open the <code>SYL</code> folder. <strong>Right-click</strong> <code>01_INSTALL_FIRST.bat</code> → <strong>Run as Administrator</strong>.
-          This installs Python, required packages, and configures the control server.
-          A terminal window opens and closes automatically when complete. This step only needs to be done once.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="snum">03</div>
-      <div>
-        <div class="stitle">Your Media Folder</div>
-        <div class="sbody">
-          Inside the <code>SYL</code> folder you'll find two show folders:<br><br>
-          <strong>SHOW_FOLDER_MASTERMEDIAFOLDER</strong> — pre-configured and ready to use immediately.
-          Drop your <strong>MP4 or MOV</strong> files directly into it and you're set.<br><br>
-          <strong>SHOW_FOLDER_TEMPLATE</strong> — an empty template for future shows.
-          When you're comfortable with the workflow, copy this template to any location on your machine,
-          fill it with your media files, then point SYL to it using the folder selector at startup.
-          Your show folder can live on any drive.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="snum">04</div>
-      <div>
-        <div class="stitle">Launch SYL</div>
-        <div class="sbody">
-          Double-click <code>02_START_SYL.bat</code>. The control surface opens automatically in your browser
-          and the SYL engine starts. Allow <strong>60–90 seconds</strong> for the engine to fully initialize on first run.
-          Do not close the terminal window that appears — it keeps the system running.
-          Your show folder is scanned automatically and assets appear in the Media Browser.
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="snum">05</div>
-      <div>
-        <div class="stitle">Operating SYL</div>
-        <div class="sbody">
-          <strong>Media Browser</strong> — Your video assets load as thumbnails. Click any clip to select it.<br><br>
-
-          <strong>Assign to Surfaces</strong> — SYL drives three surfaces: <code>L</code> · <code>M</code> · <code>R</code> (Left, Main, Right).
-          With a clip selected, click the surface button to assign. Each surface is independent.<br><br>
-
-          <strong>Cues 1–4</strong> — Select a cue slot and assign clips to any combination of surfaces.
-          Press <strong>ARM</strong> to prepare the cue silently — nothing changes on output until you fire.
-          Press <strong>FIRE</strong> to execute. All assigned surfaces cut simultaneously.
-          Cue assignments are saved automatically between sessions.<br><br>
-
-          <strong>Presets P1–P4</strong> — Store and recall full surface states instantly.
-          Press a preset slot to write your current surface configuration to it.
-          Press it again any time to restore that state. Use for fast scene switching mid-show.<br><br>
-
-          <strong>Audio / Dropboard</strong> — Drag a <strong>WAV</strong> file directly onto the Dropboard panel,
-          or use the file picker. Play, pause, and level control are available in the panel.
-          Audio runs independently of the video surfaces.<br><br>
-
-          <strong>REC</strong> — Press to start recording the current SYL output.
-          Press again to stop. Recordings are saved as timestamped MP4 files in the
-          <code>logs</code> folder inside your SYL directory. Open that folder to retrieve them.
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <!-- Release Notes -->
+  <div class="slabel">Release Notes</div>
+  <table class="ui-table">
+    <tr>
+      <td>BUILD</td>
+      <td>SYL 1.0 · Licensed Evaluation Build · April 2026.</td>
+    </tr>
+    <tr>
+      <td>CORE</td>
+      <td>Local Windows runtime for real-time multi-surface media orchestration using a UE5 runtime engine.</td>
+    </tr>
+    <tr>
+      <td>WORKFLOW</td>
+      <td>Show-folder based media ingest, cue preparation, surface assignment, playback, recording, and session persistence.</td>
+    </tr>
+  </table>
 
   <!-- Interface Reference -->
   <div class="slabel">Interface Reference</div>
@@ -718,17 +539,17 @@
     </tr>
   </table>
 
-  <!-- Disabled Features -->
-  <div class="slabel">Available Services</div>
+  <!-- Premium Modules -->
+  <div class="slabel">Premium Modules</div>
   <div class="dis-box">
-    <div class="dis-tag">— NOTE</div>
+    <div class="dis-tag">ACTIVATION</div>
     <div class="dis-body">
-      The following services are <strong>available but not active</strong> in this build:
-      <strong>AI Director</strong> (natural language show control),
-      <strong>Voice Control</strong>,
-      <strong>Pixel Streaming</strong> (remote browser access), and
-      <strong>Remote Control</strong> (tablet and mobile surface).<br><br>
-      Contact <strong>GRIDtRAVELER Labs</strong> to activate any of these for your specific workflow and setup.
+      This licensed evaluation build includes the core SYL runtime. Additional modules can be activated per workflow:
+      <strong>AI Director</strong> for guided show operation,
+      <strong>Voice Control</strong> for hands-free cue commands,
+      <strong>Pixel Streaming</strong> for secure remote review, and
+      <strong>Remote / Tablet Control</strong> for mobile operator surfaces.<br><br>
+      These are positioned as enterprise add-ons, not unfinished features.
     </div>
   </div>
 
@@ -738,9 +559,10 @@
     <div>
       <div class="c-label">Your GRIDtRAVELER Contact</div>
       <div class="c-name">GRIDTRAVELER LABS</div>
+      <div class="c-label" style="margin-top:10px;line-height:1.8;color:rgba(240,237,232,0.42);">Evaluation support: priority response during scheduled demo, installation, and show-prep periods.</div>
     </div>
     <div class="c-links">
-      <a class="c-link" href="mailto:gridtraveler@gmail.com">gridtraveler@gmail.com</a>
+      <a class="c-link" href="mailto:support@gridtravelerlabs.com">support@gridtravelerlabs.com</a>
       <div class="cdiv"></div>
       <a class="c-link" href="https://gridtravelerlabs.com" target="_blank">gridtravelerlabs.com</a>
     </div>
@@ -749,7 +571,7 @@
 </div>
 
 <script>
-  // ─── SET YOUR ACCESS CODE HERE ───────────────────────
+  // ─── DEMO ACCESS CODE — replace with per-client slug/auth before public delivery ───
   const ACCESS_CODE = "SYL2026";
   // ─────────────────────────────────────────────────────
 
