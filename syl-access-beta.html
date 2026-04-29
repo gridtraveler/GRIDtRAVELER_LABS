@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYL 1.0 — Client Access | GRIDtRAVELER Labs</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-dim: rgba(201,168,76,0.15);
+    --gold-glow: rgba(201,168,76,0.35);
+    --white: #F0EDE8;
+    --grey: #6B6B6B;
+    --bg: #080808;
+    --surface: #0E0E0E;
+    --border: rgba(201,168,76,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  /* Ambient grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, #080808 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  #login-screen {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 60px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  #login-screen.hiding {
+    animation: fadeOut 0.5s ease forwards;
+  }
+
+  .logo-lockup {
+    text-align: center;
+    user-select: none;
+  }
+
+  .logo-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .logo-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.45em;
+    color: var(--white);
+    opacity: 0.6;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .login-card {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+  }
+
+  /* Corner accents */
+  .login-card::before, .login-card::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.6;
+  }
+  .login-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .login-card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .access-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .access-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .input-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    padding: 16px 20px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-text-security: disc;
+  }
+
+  .input-group input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), inset 0 0 20px rgba(201,168,76,0.04);
+  }
+
+  .input-group input::placeholder {
+    color: rgba(240,237,232,0.2);
+    letter-spacing: 0.2em;
+  }
+
+  #error-msg {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: #E05555;
+    margin-bottom: 16px;
+    min-height: 14px;
+    display: none;
+  }
+
+  #error-msg.visible { display: block; }
+
+  .btn-access {
+    width: 100%;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    padding: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-access:hover {
+    background: #D4B560;
+    box-shadow: 0 0 30px rgba(201,168,76,0.3);
+  }
+
+  .btn-access:active { transform: scale(0.99); }
+
+  .btn-access.loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    animation: shimmer 0.8s ease;
+  }
+
+  .login-footer {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--grey);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  /* ─── PORTAL SCREEN ─── */
+  #portal-screen {
+    display: none;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 720px;
+    padding: 60px 40px 80px;
+  }
+
+  #portal-screen.visible {
+    display: block;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .portal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .portal-logo-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .portal-logo-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.45em;
+    color: var(--white);
+    opacity: 0.5;
+    margin-top: 4px;
+  }
+
+  .portal-meta {
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--grey);
+    line-height: 2;
+  }
+
+  .portal-meta .version {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* Hero download zone */
+  .download-zone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 50px 40px;
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .download-zone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .download-zone-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .download-zone-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .download-zone-title span { color: var(--gold); }
+
+  .download-zone-desc {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--grey);
+    margin-bottom: 36px;
+    line-height: 1.8;
+  }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    padding: 18px 48px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .btn-download:hover {
+    background: #D4B560;
+    box-shadow: 0 0 50px rgba(201,168,76,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-download svg {
+    width: 18px;
+    height: 18px;
+    fill: #080808;
+  }
+
+  .file-info {
+    margin-top: 20px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(107,107,107,0.7);
+  }
+
+  /* ─── ONBOARDING ─── */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 60px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 0 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    position: relative;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .step:nth-child(1) { animation-delay: 0.1s; }
+  .step:nth-child(2) { animation-delay: 0.2s; }
+  .step:nth-child(3) { animation-delay: 0.3s; }
+  .step:nth-child(4) { animation-delay: 0.4s; }
+  .step:nth-child(5) { animation-delay: 0.5s; }
+
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    opacity: 0.25;
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .step-content {}
+
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .step-body {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--grey);
+    line-height: 1.9;
+  }
+
+  .step-body code {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    padding: 2px 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+  }
+
+  /* Requirements grid */
+  .req-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 60px;
+    border: 1px solid var(--border);
+  }
+
+  .req-cell {
+    background: var(--surface);
+    padding: 20px 24px;
+  }
+
+  .req-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .req-value {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    opacity: 0.8;
+  }
+
+  /* Contact */
+  .contact-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 30px;
+    border: 1px solid var(--border);
+    gap: 20px;
+  }
+
+  .contact-bar-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--grey);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .contact-bar-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+
+  .contact-bar-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .contact-link {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .contact-link:hover { opacity: 0.7; }
+
+  .divider { width: 1px; height: 16px; background: var(--border); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-20px); }
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(100%); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    #login-screen { padding: 40px 24px; }
+    .login-card { padding: 28px 24px; }
+    .portal-header { flex-direction: column; gap: 20px; }
+    .portal-meta { text-align: left; }
+    .download-zone { padding: 36px 24px; }
+    .download-zone-title { font-size: 52px; }
+    .req-grid { grid-template-columns: 1fr; }
+    .contact-bar { flex-direction: column; align-items: flex-start; gap: 12px; }
+    #portal-screen { padding: 40px 24px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+<div id="login-screen">
+
+  <div class="logo-lockup">
+    <span class="logo-main">GRIDtRAVELER</span>
+    <span class="logo-sub">Labs</span>
+  </div>
+
+  <div class="login-card">
+    <div class="access-label">Client Access</div>
+
+    <div class="input-group">
+      <input
+        type="password"
+        id="password-input"
+        placeholder="ACCESS CODE"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <div id="error-msg">— INVALID ACCESS CODE</div>
+
+    <button class="btn-access" id="login-btn" onclick="attemptLogin()">
+      ENTER
+    </button>
+  </div>
+
+  <div class="login-footer">
+    GRIDTRAVELERLABS.COM &nbsp;·&nbsp; CONFIDENTIAL
+  </div>
+
+</div>
+
+
+<!-- ═══════════════ PORTAL SCREEN ═══════════════ -->
+<div id="portal-screen">
+
+  <!-- Header -->
+  <div class="portal-header">
+    <div>
+      <div class="portal-logo-main">GRIDtRAVELER</div>
+      <div class="portal-logo-sub">Labs</div>
+    </div>
+    <div class="portal-meta">
+      <div class="version">SYL 1.0</div>
+      <div>VERSION 1.0.0</div>
+      <div>RELEASED — APRIL 2026</div>
+      <div style="margin-top:8px;color:rgba(201,168,76,0.4);">BETA BUILD</div>
+    </div>
+  </div>
+
+  <!-- Download Zone -->
+  <div class="download-zone">
+    <div class="download-zone-eyebrow">Your build is ready</div>
+    <div class="download-zone-title"><span>SYL</span> 1.0</div>
+    <div class="download-zone-desc">
+      Real-time spatial intelligence platform<br>
+      Packaged for Windows 10/11 · UE5 Runtime Included
+    </div>
+    <!-- ↓ REPLACE href WITH YOUR ACTUAL DOWNLOAD LINK (Google Drive, Dropbox, etc.) -->
+    <a class="btn-download" href="YOUR_DOWNLOAD_LINK_HERE" target="_blank">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/>
+      </svg>
+      DOWNLOAD SYL 1.0
+    </a>
+    <div class="file-info">SYL_1.0_WIN64.ZIP &nbsp;·&nbsp; INSTALLER INCLUDED</div>
+  </div>
+
+  <!-- System Requirements -->
+  <div class="section-label">System Requirements</div>
+  <div class="req-grid" style="margin-bottom:60px;">
+    <div class="req-cell">
+      <div class="req-label">Operating System</div>
+      <div class="req-value">Windows 10 / 11 (64-bit)</div>
+    </div>
+    <div class="req-cell">
+      <div class="req-label">GPU</div>
+      <div class="req-value">NVIDIA RTX 2070 or higher</div>
+    </div>
+    <div class="req-cell">
+      <div class="req-label">RAM</div>
+      <div class="req-value">16 GB minimum / 32 GB recommended</div>
+    </div>
+    <div class="req-cell">
+      <div class="req-label">Storage</div>
+      <div class="req-value">D:\ drive with show assets folder</div>
+    </div>
+    <div class="req-cell">
+      <div class="req-label">Network Ports</div>
+      <div class="req-value">8000 (OSC) &nbsp;·&nbsp; 5100 (Control Surface)</div>
+    </div>
+    <div class="req-cell">
+      <div class="req-label">Display</div>
+      <div class="req-value">1920×1080 minimum · HDR supported</div>
+    </div>
+  </div>
+
+  <!-- First Launch Steps -->
+  <div class="section-label">First Launch</div>
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-number">01</div>
+      <div class="step-content">
+        <div class="step-title">Extract & Place</div>
+        <div class="step-body">
+          Extract the ZIP. Copy the <code>SYL</code> folder to <code>C:\SYL\</code>
+          and create your show folder at <code>D:\MyShow\</code>.
+          Place your video assets (MP4/MOV) inside <code>D:\MyShow\</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">02</div>
+      <div class="step-content">
+        <div class="step-title">Run SYL_Control.exe</div>
+        <div class="step-body">
+          Launch <code>SYL_Control.exe</code> first — this scans your show folder,
+          generates the asset manifest, and starts the control server.
+          A browser tab will open automatically with the control surface.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">03</div>
+      <div class="step-content">
+        <div class="step-title">Launch the Engine</div>
+        <div class="step-body">
+          From the control surface (or directly), launch <code>SYL.exe</code>.
+          The engine will initialize and your LED wall outputs will go live.
+          Allow 30–60 seconds for full startup on first run.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">04</div>
+      <div class="step-content">
+        <div class="step-title">Load Your Show</div>
+        <div class="step-body">
+          In the control surface, select your show file. Assets populate automatically.
+          Assign clips to Wall A / B / C using the cue slots (1–4).
+          Arm a cue, then fire — your walls respond instantly.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">05</div>
+      <div class="step-content">
+        <div class="step-title">You're Live</div>
+        <div class="step-body">
+          All cues, snapshots, and wall assignments persist between sessions.
+          The AI Director is available for natural language control via the chat panel.
+          OSC commands are received on port <code>8000</code> from your existing show control rig.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Contact -->
+  <div class="section-label">Direct Line</div>
+  <div class="contact-bar">
+    <div>
+      <div class="contact-bar-label">Your GRIDtRAVELER Contact</div>
+      <!-- ↓ REPLACE WITH YOUR NAME -->
+      <div class="contact-bar-name">GRIDTRAVELER LABS</div>
+    </div>
+    <div class="contact-bar-links">
+      <!-- ↓ REPLACE WITH YOUR EMAIL -->
+      <a class="contact-link" href="mailto:hello@gridtravelerlabs.com">hello@gridtravelerlabs.com</a>
+      <div class="divider"></div>
+      <a class="contact-link" href="https://gridtravelerlabs.com" target="_blank">gridtravelerlabs.com</a>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+  // ─── CHANGE THIS PASSWORD ───────────────────────────────
+  const ACCESS_CODE = "SYL2026";
+  // ────────────────────────────────────────────────────────
+
+  const input = document.getElementById('password-input');
+  const errorMsg = document.getElementById('error-msg');
+  const loginBtn = document.getElementById('login-btn');
+
+  // Allow Enter key
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') attemptLogin();
+  });
+
+  // Clear error on typing
+  input.addEventListener('input', function() {
+    errorMsg.classList.remove('visible');
+  });
+
+  function attemptLogin() {
+    const val = input.value.trim();
+
+    if (val === ACCESS_CODE) {
+      loginBtn.classList.add('loading');
+      loginBtn.textContent = 'VERIFIED';
+
+      const loginScreen = document.getElementById('login-screen');
+      loginScreen.classList.add('hiding');
+
+      setTimeout(() => {
+        loginScreen.style.display = 'none';
+        const portal = document.getElementById('portal-screen');
+        portal.classList.add('visible');
+      }, 500);
+
+    } else {
+      errorMsg.classList.add('visible');
+      input.value = '';
+      input.focus();
+      // Shake effect
+      input.style.transform = 'translateX(-6px)';
+      setTimeout(() => input.style.transform = 'translateX(6px)', 80);
+      setTimeout(() => input.style.transform = 'translateX(-4px)', 160);
+      setTimeout(() => input.style.transform = 'translateX(0)', 240);
+    }
+  }
+</script>
+
+</body>
+</html>
