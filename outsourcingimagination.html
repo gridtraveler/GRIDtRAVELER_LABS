@@ -3,8 +3,80 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Human Cost of Outsourcing Imagination</title>
-<meta name="description" content="An evidence-based synthesis on the cognitive, mental, physical, and developmental risks of delegating creativity to AI." />
+<title>The Human Cost of Outsourcing Imagination | AI, Creativity &amp; Cognitive Debt</title>
+<meta name="description" content="An interactive research field note on AI, creativity, cognitive debt, idea homogenization, children, embodied practice, and the rule: generate first, then consult." />
+<meta name="author" content="Andrey Shcherbinin" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="theme-color" content="#FDFCFA" />
+<link rel="canonical" href="https://www.gridtravelerlabs.com/outsourcingimagination.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.gridtravelerlabs.com/outsourcingimagination.html" />
+<meta property="og:title" content="The Human Cost of Outsourcing Imagination" />
+<meta property="og:description" content="AI is not the danger. Passive substitution is. The rule: generate first, then consult." />
+<meta property="og:image" content="https://www.gridtravelerlabs.com/images/outsourcing-imagination-og.jpg" />
+<meta property="og:image:secure_url" content="https://www.gridtravelerlabs.com/images/outsourcing-imagination-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="627" />
+<meta property="og:image:alt" content="Editorial hero image for The Human Cost of Outsourcing Imagination with Japanese watercolor illustration." />
+<meta property="og:site_name" content="GRIDtRAVELER Labs" />
+<meta property="article:published_time" content="2026-06-16T00:00:00-04:00" />
+<meta property="article:modified_time" content="2026-06-16T00:00:00-04:00" />
+<meta property="article:author" content="Andrey Shcherbinin" />
+<meta property="article:section" content="AI, Creativity, Cognitive Science" />
+<meta property="article:tag" content="AI" />
+<meta property="article:tag" content="Creativity" />
+<meta property="article:tag" content="Cognitive Debt" />
+<meta property="article:tag" content="Imagination" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Human Cost of Outsourcing Imagination" />
+<meta name="twitter:description" content="AI is not the danger. Passive substitution is. The rule: generate first, then consult." />
+<meta name="twitter:image" content="https://www.gridtravelerlabs.com/images/outsourcing-imagination-og.jpg" />
+<meta name="twitter:image:alt" content="Editorial hero image for The Human Cost of Outsourcing Imagination." />
+<meta name="twitter:creator" content="@gridtraveler" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Human Cost of Outsourcing Imagination",
+  "alternativeHeadline": "AI is not the danger. Passive substitution is.",
+  "description": "An interactive research field note on AI, creativity, cognitive debt, idea homogenization, children, embodied practice, and the rule: generate first, then consult.",
+  "author": {
+    "@type": "Person",
+    "name": "Andrey Shcherbinin",
+    "url": "https://www.artstation.com/gridtraveler"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "GRIDtRAVELER Labs",
+    "url": "https://www.gridtravelerlabs.com/"
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://www.gridtravelerlabs.com/images/outsourcing-imagination-og.jpg",
+    "width": 1200,
+    "height": 627
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.gridtravelerlabs.com/outsourcingimagination.html"
+  },
+  "datePublished": "2026-06-16T00:00:00-04:00",
+  "dateModified": "2026-06-16T00:00:00-04:00",
+  "keywords": [
+    "outsourcing imagination",
+    "AI and creativity",
+    "cognitive debt",
+    "cognitive offloading",
+    "generation effect",
+    "idea homogenization",
+    "generate first then consult"
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -64,6 +136,8 @@
   /* hero */
   .hero{padding:118px 0 56px;}
   .hero .eyebrow{display:block;margin-bottom:20px;}
+  .hero-figure{max-width:var(--maxw);margin:40px auto 0;padding:0 28px;}
+  .hero-figure img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--rule);box-shadow:0 18px 50px rgba(12,11,10,.10);}
   h1{font-family:"Newsreader",serif;font-weight:600;font-size:clamp(38px,6.4vw,66px);line-height:1.06;letter-spacing:-.01em;margin:0;color:var(--text);max-width:16ch;}
   h1 em{font-style:italic;font-weight:500;color:var(--accent);}
   .deck{font-family:var(--bodyfont);font-size:clamp(20px,2.4vw,25px);line-height:1.5;color:var(--text-2);max-width:40ch;margin:26px 0 0;}
@@ -178,6 +252,23 @@
   .rec p{font-size:16.5px;line-height:1.55;color:var(--text-2);margin:0;}
   .rec .who{font-family:"Inter",sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-top:10px;}
 
+
+
+  /* quick take / viral summary — full-width black exhibit band */
+  .quicktake-band{margin:52px 0;}
+  .quicktake-band .qt-label{font-family:"Inter",sans-serif;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-bottom:18px;}
+  .quicktake-band p{font-size:clamp(20px,2.4vw,25px);line-height:1.45;margin:0 0 16px;color:var(--on);}
+  .quicktake-band p:last-child{margin-bottom:0;}
+  .quicktake-band .qt-rule{font-family:"Inter",sans-serif;font-weight:800;font-size:clamp(18px,2.2vw,23px);letter-spacing:.01em;color:var(--orange);}
+
+  .launch-box{max-width:var(--readw);margin:42px auto 0;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:26px 28px;text-align:center;}
+  .launch-box h3{font-family:"Inter",sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;}
+  .launch-box p{font-size:18px;line-height:1.55;color:var(--text-2);margin:0;}
+  .copy-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px;}
+  .copy-actions button{font-family:"Inter",sans-serif;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--accent);border:0;border-radius:999px;padding:11px 16px;cursor:pointer;}
+  .copy-actions button.secondary{background:var(--text);}
+  .copy-actions button:focus-visible{outline:3px solid rgba(181,81,26,.35);outline-offset:3px;}
+
   /* caveat (white) */
   .caveat{max-width:var(--readw);margin:42px auto 0;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:28px 30px;}
   .caveat h3{font-family:"Inter",sans-serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;}
@@ -243,7 +334,19 @@
     <p class="deck reveal in">What happens to the mind when we hand creativity to a machine? The evidence draws one exacting line: <b>the harm is not the tool — it is whether the human still does the generative work.</b></p>
     <p class="byline reveal in">Research, synthesis &amp; design by <b>Andrey Shcherbinin</b> · GRIDtRAVELER Labs</p>
   </div>
+  <figure class="hero-figure reveal in">
+    <img src="images/outsourcing-imagination-og.jpg" width="1200" height="627" alt="A figure in ink-wash style writing by hand as origami cranes and a tree of branching neurons rise from the mind, over the title The Human Cost of Outsourcing Imagination." loading="eager" fetchpriority="high" />
+  </figure>
 </header>
+
+<section class="band quicktake-band reveal" aria-labelledby="quicktake-title">
+  <div class="band-inner" id="quicktake-title">
+    <div class="qt-label">The 10-second version</div>
+    <p><b>AI is not the enemy of imagination.</b><br>Passive substitution is.</p>
+    <p>When humans generate first and use AI second, AI can amplify skill. When humans ask AI to generate first, the mind loses the exercise that builds memory, judgment, originality, and ownership.</p>
+    <p class="qt-rule">Generate first. Then consult.</p>
+  </div>
+</section>
 
 <section class="abstract">
   <div class="wrap read">
@@ -368,10 +471,10 @@
     <div class="band-inner">
       <div class="fig-label">Figure 5 · Adolescent adoption, United States</div>
       <div class="statgrid" id="statgrid">
-        <div class="stat"><div class="big" data-to="70" data-suf="%">0%</div><div class="lab">have used a generative AI tool</div></div>
-        <div class="stat"><div class="big" data-to="72" data-suf="%">0%</div><div class="lab">have used an AI companion</div></div>
-        <div class="stat"><div class="big" data-to="52" data-suf="%">0%</div><div class="lab">are regular companion users</div></div>
-        <div class="stat"><div class="big" data-to="13" data-suf="%">0%</div><div class="lab">use a companion every day</div></div>
+        <div class="stat"><div class="big" data-to="70" data-suf="%">70%</div><div class="lab">have used a generative AI tool</div></div>
+        <div class="stat"><div class="big" data-to="72" data-suf="%">72%</div><div class="lab">have used an AI companion</div></div>
+        <div class="stat"><div class="big" data-to="52" data-suf="%">52%</div><div class="lab">are regular companion users</div></div>
+        <div class="stat"><div class="big" data-to="13" data-suf="%">13%</div><div class="lab">use a companion every day</div></div>
       </div>
       <figcaption><b>Common Sense Media, 2024–2025.</b> Adoption is near-universal among teens, yet there is still no large controlled study of AI’s effect on children’s creativity — the urgent gap in the entire field.</figcaption>
     </div>
@@ -452,11 +555,20 @@
         <div class="clab">Research, synthesis &amp; design</div>
         <div class="cname">Andrey Shcherbinin</div>
         <div class="crole">Lead Procedural Technical Artist — Real-Time Visualization &amp; Cinematic Pipelines · Founder, GRIDtRAVELER Labs</div>
-        <div class="ccon"><br><a href="https://www.artstation.com/gridtraveler">Digital Art</a></div>
+        <div class="ccon"><a href="https://www.artstation.com/gridtraveler" rel="me noopener" target="_blank">Digital Art</a></div>
       </div>
       <div>
         <div class="clab">About this field note</div>
         <p class="cnote">A synthesis of peer-reviewed cognitive science, neuroscience and psychology from roughly 2023–2026, built on established foundations in cognitive offloading, the generation effect, and creativity research. Findings are graded by strength; emerging claims are flagged as informed concern rather than settled science. Every figure is illustrative — designed to make the evidence legible, not to overstate it.</p>
+      </div>
+    </div>
+
+    <div class="launch-box reveal">
+      <h3>Share this field note</h3>
+      <p>If this changed how you think about AI, share it with one artist, one teacher, and one founder.</p>
+      <div class="copy-actions" aria-label="Share actions">
+        <button type="button" id="copyTitle">Copy title</button>
+        <button type="button" id="copyQuote" class="secondary">Copy quote</button>
       </div>
     </div>
     <div class="footline"><span>GRIDtRAVELER Labs · Field Notes Nº1 · 2026</span><span>Set in Newsreader &amp; Inter</span></div>
@@ -467,6 +579,16 @@
 (function(){
   "use strict";
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+  function copyText(txt){
+    if(navigator.clipboard && window.isSecureContext){navigator.clipboard.writeText(txt).catch(()=>{});}
+    else{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+  }
+  const copyTitle=document.getElementById('copyTitle');
+  const copyQuote=document.getElementById('copyQuote');
+  if(copyTitle)copyTitle.addEventListener('click',()=>copyText('The Human Cost of Outsourcing Imagination — https://www.gridtravelerlabs.com/outsourcingimagination.html'));
+  if(copyQuote)copyQuote.addEventListener('click',()=>copyText('AI is not the danger. Passive substitution is. Generate first. Then consult.'));
 
   document.getElementById('fontGrp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.body.classList.toggle('sans',b.dataset.font==='sans');[...e.currentTarget.children].forEach(x=>x.classList.toggle('on',x===b));});
   document.getElementById('sizeGrp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.body.classList.toggle('big',b.dataset.size==='big');[...e.currentTarget.children].forEach(x=>x.classList.toggle('on',x===b));});
