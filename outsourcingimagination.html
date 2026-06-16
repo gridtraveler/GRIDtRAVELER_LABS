@@ -136,8 +136,14 @@
   /* hero */
   .hero{padding:118px 0 56px;}
   .hero .eyebrow{display:block;margin-bottom:20px;}
-  .hero-figure{max-width:var(--maxw);margin:40px auto 0;padding:0 28px;}
-  .hero-figure img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--rule);box-shadow:0 18px 50px rgba(12,11,10,.10);}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center;}
+  .hero-figure{margin:0;}
+  .hero-figure img{display:block;width:100%;height:auto;border-radius:10px;}
+  @media(min-width:880px){
+    .hero .read{max-width:none;margin:0;}
+    .hero-grid{grid-template-columns:1.05fr .95fr;gap:48px;}
+    .hero-copy{align-self:center;}
+  }
   h1{font-family:"Newsreader",serif;font-weight:600;font-size:clamp(38px,6.4vw,66px);line-height:1.06;letter-spacing:-.01em;margin:0;color:var(--text);max-width:16ch;}
   h1 em{font-style:italic;font-weight:500;color:var(--accent);}
   .deck{font-family:var(--bodyfont);font-size:clamp(20px,2.4vw,25px);line-height:1.5;color:var(--text-2);max-width:40ch;margin:26px 0 0;}
@@ -329,14 +335,18 @@
 
 <header class="hero">
   <div class="wrap read">
-    <span class="eyebrow reveal in">A Research Synthesis · Cognitive Science · 2026</span>
-    <h1 class="reveal in">The human cost of outsourcing <em>imagination</em></h1>
-    <p class="deck reveal in">What happens to the mind when we hand creativity to a machine? The evidence draws one exacting line: <b>the harm is not the tool — it is whether the human still does the generative work.</b></p>
-    <p class="byline reveal in">Research, synthesis &amp; design by <b>Andrey Shcherbinin</b> · GRIDtRAVELER Labs</p>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow reveal in">A Research Synthesis · Cognitive Science · 2026</span>
+        <h1 class="reveal in">The human cost of outsourcing <em>imagination</em></h1>
+        <p class="deck reveal in">What happens to the mind when we hand creativity to a machine? The evidence draws one exacting line: <b>the harm is not the tool — it is whether the human still does the generative work.</b></p>
+        <p class="byline reveal in">Research, synthesis &amp; design by <b>Andrey Shcherbinin</b> · GRIDtRAVELER Labs</p>
+      </div>
+      <figure class="hero-figure reveal in">
+        <img src="images/imagination-illustration.jpg" width="738" height="906" alt="Ink-wash illustration of a figure writing by hand as origami cranes, a tree of branching neurons, and a red sun rise from the mind." loading="eager" fetchpriority="high" />
+      </figure>
+    </div>
   </div>
-  <figure class="hero-figure reveal in">
-    <img src="images/outsourcing-imagination-og.jpg" width="1200" height="627" alt="A figure in ink-wash style writing by hand as origami cranes and a tree of branching neurons rise from the mind, over the title The Human Cost of Outsourcing Imagination." loading="eager" fetchpriority="high" />
-  </figure>
 </header>
 
 <section class="band quicktake-band reveal" aria-labelledby="quicktake-title">
