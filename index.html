@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRIDtRAVELER Labs — Real-Time Spatial Intelligence Platform</title>
+<meta name="description" content="The spatial intelligence platform built on Unreal Engine 5. Transforming any physical environment into a programmable, data-responsive reality.">
+<meta property="og:title" content="GRIDtRAVELER Labs — Real-Time Spatial Intelligence Platform">
+<meta property="og:description" content="The spatial intelligence platform built on Unreal Engine 5.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--background:230 40% 3%;--foreground:225 30% 92%;
+--card:232 38% 6%;--card-foreground:225 30% 92%;
+--primary:43 57% 54%;--primary-foreground:40 80% 4%;
+--secondary:230 25% 10%;--secondary-foreground:225 30% 92%;
+--muted:230 20% 12%;--muted-foreground:225 15% 55%;
+--accent:230 25% 10%;--accent-foreground:225 30% 92%;
+--border:230 20% 15%;--ring:43 57% 54%;
+--gold:43 57% 54%;--gold-light:40 65% 70%;
+--deep:232 38% 4.5%;--surface:232 38% 7%;
+--lift:230 25% 10%;--dim:225 15% 35%;
+--cyan:180 100% 40%;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+background:hsl(var(--background));color:hsl(var(--foreground));
+font-family:'Outfit',sans-serif;-webkit-font-smoothing:antialiased;
+overflow-x:hidden;line-height:1.6;
+}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+opacity:0.5;}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+.font-display{font-family:'Cormorant Garamond',serif}
+.font-mono{font-family:'JetBrains Mono',monospace}
+.text-primary{color:hsl(var(--primary))}
+.text-foreground{color:hsl(var(--foreground))}
+.text-muted{color:hsl(var(--muted-foreground))}
+.text-dim{color:hsl(var(--dim))}
+.bg-background{background:hsl(var(--background))}
+.bg-surface{background:hsl(var(--surface))}
+.bg-deep{background:hsl(var(--deep))}
+.bg-lift{background:hsl(var(--lift))}
+.bg-primary{background:hsl(var(--primary))}
+.border-clr{border-color:hsl(var(--border))}
+.border-primary{border-color:hsl(var(--primary))}
+.max-w-container{max-width:1280px}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:hsl(var(--background)/0.8);backdrop-filter:blur(20px);border-bottom:1px solid hsl(var(--border))}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-box{width:36px;height:36px;border:1px solid hsl(var(--primary));display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:hsl(var(--primary));letter-spacing:3px;position:relative}
+.nav-logo-box::after{content:'';position:absolute;inset:3px;border:1px solid hsl(var(--primary)/0.2)}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:3px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:36px}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--muted-foreground));transition:color 0.2s}
+.nav-links a:hover{color:hsl(var(--foreground))}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;font-weight:500;transition:all 0.2s;cursor:pointer;border:none;border-radius:2px;font-size:14px;white-space:nowrap}
+.btn-gold{background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-weight:600;padding:12px 40px;box-shadow:0 0 40px hsl(var(--gold)/0.25)}
+.btn-gold:hover{background:hsl(var(--gold-light));box-shadow:0 0 60px hsl(var(--gold)/0.4);transform:translateY(-1px)}
+.btn-outline{border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));padding:12px 40px}
+.btn-outline:hover{border-color:hsl(var(--primary));color:hsl(var(--primary))}
+.btn-nav{background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 16px}
+.btn-nav-ghost{border:1px solid hsl(var(--border));background:transparent;color:hsl(var(--muted-foreground));font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:8px 16px}
+.btn-ghost-gold{border:1px solid hsl(var(--border)/0.5);background:transparent;color:hsl(var(--muted-foreground));padding:12px 40px}
+.btn-ghost-gold:hover{border-color:hsl(var(--primary));color:hsl(var(--primary))}
+.btn-full{width:100%}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 48px 0;position:relative;z-index:1;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+background-image:linear-gradient(hsl(43 57% 54%/0.04) 1px,transparent 1px),linear-gradient(90deg,hsl(43 57% 54%/0.04) 1px,transparent 1px);
+background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border:1px solid hsl(var(--primary)/0.3);background:hsl(var(--primary)/0.05);border-radius:1px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:40px}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:hsl(var(--primary));box-shadow:0 0 8px hsl(var(--gold));animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,7vw,110px);font-weight:300;line-height:0.95;letter-spacing:-0.02em;margin-bottom:32px}
+.hero h1 em{font-style:italic;color:hsl(var(--primary))}
+.hero h1 .sub{display:block;font-size:clamp(38px,5vw,76px);color:hsl(var(--muted-foreground));font-weight:300}
+.hero-desc{font-size:clamp(15px,1.5vw,18px);color:hsl(var(--muted-foreground));max-width:640px;line-height:1.7;margin-bottom:48px}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:80px}
+.metrics-bar{display:flex;border:1px solid hsl(var(--border));background:hsl(var(--surface)/0.8);backdrop-filter:blur(20px);max-width:900px;width:100%}
+.metric{flex:1;padding:24px 32px;text-align:left}
+.metric+.metric{border-left:1px solid hsl(var(--border))}
+.metric-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:hsl(var(--primary));line-height:1;margin-bottom:6px}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim))}
+
+/* CREDITS */
+.credits{padding:48px 0;border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));overflow:hidden}
+.credits-track{display:flex;align-items:center;gap:64px;white-space:nowrap;width:max-content;animation:scroll 20s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.credits-track span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--dim))}
+.credits-track .highlight{color:hsl(var(--primary)/0.5)}
+
+/* PROBLEMS */
+.problems{padding:56px 0;border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));background:hsl(var(--deep))}
+.problems-inner{max-width:1280px;margin:0 auto;padding:0 48px;display:flex;align-items:center;gap:24px;overflow-x:auto}
+.problem-item{flex-shrink:0;display:flex;align-items:center;gap:16px;padding-right:24px}
+.problem-item+.problem-item{border-left:1px solid hsl(var(--border));padding-left:24px}
+.problem-num{font-family:'Cormorant Garamond',serif;font-size:36px;color:hsl(var(--primary));font-weight:600;white-space:nowrap}
+.problem-text{font-size:13px;color:hsl(var(--muted-foreground));max-width:160px;line-height:1.6}
+
+/* SECTION COMMON */
+.section{padding:112px 0;position:relative;z-index:1}
+.section-inner{max-width:1280px;margin:0 auto;padding:0 48px}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.section-label::before{content:'';width:32px;height:1px;background:hsl(var(--primary))}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,64px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.section-title em{font-style:italic;color:hsl(var(--primary))}
+.section-desc{font-size:15px;color:hsl(var(--muted-foreground));max-width:560px;line-height:1.7}
+.gold-line{width:48px;height:1px;background:hsl(var(--primary));margin:32px 0}
+
+/* PLATFORM */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:hsl(var(--border));margin-top:64px;border:1px solid hsl(var(--border))}
+.platform-card{background:hsl(var(--surface));padding:48px;position:relative;overflow:hidden;transition:background 0.3s}
+.platform-card:hover{background:hsl(var(--lift))}
+.platform-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,hsl(var(--primary)),transparent);opacity:0;transition:opacity 0.3s}
+.platform-card:hover::before{opacity:1}
+.platform-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:hsl(var(--dim));margin-bottom:20px}
+.platform-title{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:16px;line-height:1.2;white-space:pre-line}
+.platform-body{font-size:14px;color:hsl(var(--muted-foreground));line-height:1.7}
+.platform-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.platform-tags span{padding:4px 10px;border:1px solid hsl(var(--border));font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:hsl(var(--dim))}
+
+/* INDUSTRIES */
+.industries-strip{display:flex;overflow-x:auto;gap:1px;background:hsl(var(--border));margin-top:64px}
+.industry-card{flex-shrink:0;width:240px;background:hsl(var(--surface));padding:40px;border-bottom:3px solid transparent;transition:all 0.2s;cursor:pointer}
+.industry-card:hover{background:hsl(var(--lift));border-bottom-color:hsl(var(--primary))}
+.industry-icon{font-size:28px;margin-bottom:16px}
+.industry-title{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:10px}
+.industry-body{font-size:12px;color:hsl(var(--muted-foreground));line-height:1.6}
+
+/* PRICING */
+.pricing-toggle{display:flex;align-items:center;gap:16px;margin-bottom:64px}
+.toggle-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:color 0.2s;background:none;border:none}
+.toggle-label.active{color:hsl(var(--primary))}
+.toggle-label.inactive{color:hsl(var(--dim))}
+.toggle-track{width:48px;height:24px;border-radius:12px;border:1px solid hsl(var(--border));background:hsl(var(--surface));position:relative;cursor:pointer}
+.toggle-track.on{background:hsl(var(--primary)/0.2);border-color:hsl(var(--primary))}
+.toggle-thumb{width:16px;height:16px;border-radius:50%;position:absolute;top:3px;transition:all 0.2s}
+.toggle-thumb.off{left:4px;background:hsl(var(--dim))}
+.toggle-thumb.on{right:4px;left:auto;background:hsl(var(--primary))}
+.save-badge{margin-left:8px;color:hsl(var(--primary)/0.6)}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pricing-card{background:hsl(var(--surface));border:1px solid hsl(var(--border));padding:40px;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:border-color 0.3s}
+.pricing-card:hover{border-color:hsl(var(--primary)/0.3)}
+.pricing-card.featured{border-color:hsl(var(--primary));background:linear-gradient(135deg,hsl(var(--primary)/0.1),hsl(var(--surface)))}
+.popular-badge{position:absolute;top:0;left:0;right:0;text-align:center;padding:6px;background:hsl(var(--primary));color:hsl(var(--primary-foreground));font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;font-weight:500}
+.tier-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--primary));margin-bottom:16px}
+.tier-name{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:8px}
+.tier-tagline{font-size:12px;color:hsl(var(--muted-foreground));margin-bottom:28px;line-height:1.6;min-height:52px}
+.tier-price{display:flex;align-items:flex-start;gap:4px;margin-bottom:6px}
+.tier-dollar{font-family:'JetBrains Mono',monospace;font-size:16px;color:hsl(var(--muted-foreground));padding-top:6px}
+.tier-amount{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:600;line-height:1}
+.tier-custom{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;line-height:1;padding-top:8px}
+.tier-period{font-family:'JetBrains Mono',monospace;font-size:11px;color:hsl(var(--dim));margin-bottom:28px}
+.tier-divider{height:1px;background:hsl(var(--border));margin:24px 0}
+.tier-features{display:flex;flex-direction:column;gap:12px;flex:1;margin-bottom:32px}
+.tier-feature{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.6}
+.tier-feature.active{color:hsl(var(--muted-foreground))}
+.tier-feature.inactive{color:hsl(var(--dim))}
+.tier-feature .arrow{font-family:'JetBrains Mono',monospace;font-size:12px;flex-shrink:0;margin-top:2px}
+.tier-feature.active .arrow{color:hsl(var(--primary))}
+.tier-feature.inactive .arrow{color:hsl(var(--dim))}
+
+/* INVESTOR */
+.investor-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:flex-start;margin-top:64px}
+.investor-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:hsl(var(--border));border:1px solid hsl(var(--border))}
+.investor-stat{background:hsl(var(--surface));padding:32px}
+.investor-stat-num{font-family:'Cormorant Garamond',serif;font-size:44px;color:hsl(var(--primary));font-weight:600;line-height:1;margin-bottom:8px}
+.investor-stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim))}
+
+/* SIGNUP */
+.signup{max-width:640px;margin:0 auto;text-align:center;padding:112px 24px}
+.signup h2{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,72px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.signup h2 em{font-style:italic;color:hsl(var(--primary))}
+.form-row{display:flex;gap:12px;margin-bottom:16px}
+.form-group{flex:1;display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.form-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));text-align:left}
+.form-input,.form-select{background:hsl(var(--surface));border:1px solid hsl(var(--border));border-radius:2px;padding:14px 16px;color:hsl(var(--foreground));font-size:14px;outline:none;transition:border-color 0.2s;font-family:'Outfit',sans-serif;width:100%}
+.form-input:focus,.form-select:focus{border-color:hsl(var(--primary))}
+.form-input::placeholder{color:hsl(var(--dim))}
+.form-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:hsl(var(--dim));text-align:center;margin-top:16px}
+
+/* FOOTER */
+.footer{border-top:1px solid hsl(var(--border));background:hsl(var(--deep));position:relative;z-index:1;padding:64px 48px}
+.footer-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:48px;margin-bottom:48px}
+.footer-heading{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:hsl(var(--dim));margin-bottom:16px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a,.footer-links span{font-size:13px;color:hsl(var(--muted-foreground));transition:color 0.2s}
+.footer-links a:hover{color:hsl(var(--primary))}
+.footer-bottom{border-top:1px solid hsl(var(--border));padding-top:32px;display:flex;align-items:center;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));max-width:1280px;margin:0 auto}
+.footer-desc{font-size:13px;color:hsl(var(--muted-foreground));line-height:1.7;max-width:280px}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+.pricing-grid{grid-template-columns:1fr 1fr}
+.investor-grid{grid-template-columns:1fr}
+.platform-grid{grid-template-columns:1fr}
+.nav-links,.nav-actions{display:none}
+}
+@media(max-width:768px){
+.nav{padding:0 24px}
+.hero{padding:72px 24px 0}
+.metrics-bar{flex-direction:column}
+.metric+.metric{border-left:none;border-top:1px solid hsl(var(--border))}
+.pricing-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr 1fr}
+.section-inner,.problems-inner{padding:0 24px}
+.footer{padding:64px 24px}
+.form-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-box">GT</div>
+    <div class="nav-brand">GRID<span class="text-primary">t</span>RAVELER <span class="text-dim">LABS</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#industries">Services</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-nav-ghost">Sign In</a>
+    <a href="#contact" class="btn btn-nav">Request Access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">
+    <div class="eyebrow-dot"></div>
+    Real-Time Spatial Intelligence · Built on Unreal Engine 5
+  </div>
+  <h1>
+    Any Space.<br>
+    <em>Any Reality.</em>
+    <span class="sub">In Real Time.</span>
+  </h1>
+  <p class="hero-desc">
+    GRIDtRAVELER Labs is building the spatial operating layer for physical
+    environments — transforming any venue, surgical theater, mission control
+    room, or LED volume into a programmable, data-responsive, AI-controlled reality.
+  </p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn btn-gold">Request Early Access</a>
+    <a href="#about" class="btn btn-outline">Learn More →</a>
+  </div>
+  <div class="metrics-bar">
+    <div class="metric"><div class="metric-num">5+</div><div class="metric-label">Industries Served</div></div>
+    <div class="metric"><div class="metric-num">$384B</div><div class="metric-label">Digital Twin Market by 2034</div></div>
+    <div class="metric"><div class="metric-num">33%</div><div class="metric-label">Virtual Production CAGR</div></div>
+    <div class="metric"><div class="metric-num">UE5</div><div class="metric-label">Native Architecture</div></div>
+  </div>
+</section>
+
+<!-- CREDITS -->
+<div class="credits">
+  <div class="credits-track">
+    <span class="highlight">Morgan Wallen</span><span> · </span>
+    <span class="highlight">Katy Perry</span><span> · </span>
+    <span class="highlight">Sphere Las Vegas</span><span> · </span>
+    <span class="highlight">Leon Bridges</span><span> · </span>
+    <span>Deloitte</span><span> · </span>
+    <span>Volvo Group</span><span> · </span>
+    <span>Live Nation</span><span> · </span>
+    <span>Riot Games</span><span> · </span>
+    <span>Disney</span><span> · </span>
+    <span>The Weather Channel</span><span> · </span>
+    <span>Comedy Central</span><span> · </span>
+    <span>LG</span><span> · </span>
+    <span>Hilton</span><span> · </span>
+    <span>Cadillac Innerspace</span><span> · </span>
+    <span class="highlight">Morgan Wallen</span><span> · </span>
+    <span class="highlight">Katy Perry</span><span> · </span>
+    <span class="highlight">Sphere Las Vegas</span><span> · </span>
+    <span class="highlight">Leon Bridges</span><span> · </span>
+    <span>Deloitte</span><span> · </span>
+    <span>Volvo Group</span><span> · </span>
+    <span>Live Nation</span><span> · </span>
+    <span>Riot Games</span><span> · </span>
+    <span>Disney</span><span> · </span>
+    <span>The Weather Channel</span><span> · </span>
+    <span>Comedy Central</span><span> · </span>
+    <span>LG</span><span> · </span>
+    <span>Hilton</span><span> · </span>
+    <span>Cadillac Innerspace</span>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="problems">
+  <div class="problems-inner">
+    <div class="problem-item"><div class="problem-num">$0</div><div class="problem-text">Unified software standard for LED volume stages today</div></div>
+    <div class="problem-item"><div class="problem-num">20min</div><div class="problem-text">Mars rover communication delay with no spatial simulation</div></div>
+    <div class="problem-item"><div class="problem-num">2D</div><div class="problem-text">How surgeons still visualize 3D anatomy during operations</div></div>
+    <div class="problem-item"><div class="problem-num">6%</div><div class="problem-text">Top 10 digital twin players combined market share — wide open</div></div>
+    <div class="problem-item"><div class="problem-num">∞</div><div class="problem-text">Industries needing real-time spatial intelligence</div></div>
+  </div>
+</div>
+
+<!-- PLATFORM -->
+<section class="section" id="platform">
+  <div class="section-inner">
+    <div class="section-label">The Platform</div>
+    <h2 class="section-title">Not software.<br><em>Infrastructure.</em></h2>
+    <p class="section-desc">
+      Built entirely on Unreal Engine 5 — the GRIDtRAVELER platform is the
+      first spatial intelligence layer that works identically across
+      industries. Configure it for a concert stage or a surgical theater.
+      The engine never changes.
+    </p>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-num">01 — RENDERING ENGINE</div>
+        <div class="platform-title">Lumen + Nanite
+at Full Fidelity</div>
+        <div class="platform-body">Physically accurate global illumination that responds to live data in real time. Infinite geometric detail with zero LOD management. The first platform to use Lumen as a data communication medium.</div>
+        <div class="platform-tags"><span>Lumen GI</span><span>Nanite</span><span>Ray Tracing</span><span>HDR</span></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-num">02 — PARTICLE INTELLIGENCE</div>
+        <div class="platform-title">Niagara
+as Data Visualizer</div>
+        <div class="platform-body">Niagara particle systems ingest live data streams — crowd flow, blood flow, atmospheric particulates — and express them as millions of physically simulated particles with full Lumen GI.</div>
+        <div class="platform-tags"><span>Niagara</span><span>GPU Particles</span><span>Live Data</span><span>Physics Sim</span></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-num">03 — DATA FABRIC</div>
+        <div class="platform-title">Any Source.
+Any Format.</div>
+        <div class="platform-body">A Python ingestion service normalizes WebSocket, OSC, REST, MQTT, DICOM, SMPTE timecode, and serial streams into a single parameter bridge driving any UE5 system in real time.</div>
+        <div class="platform-tags"><span>WebSocket</span><span>OSC</span><span>SMPTE</span><span>DICOM</span><span>MQTT</span></div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-num">04 — AI DIRECTOR</div>
+        <div class="platform-title">Natural Language
+Spatial Control</div>
+        <div class="platform-body">Claude-powered AI Director interprets creative and operational intent in plain language. A film director says 'make the reveal more dramatic.' The platform executes.</div>
+        <div class="platform-tags"><span>LLM</span><span>Claude API</span><span>NLP</span><span>Real-Time</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="section bg-deep" id="industries" style="border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border))">
+  <div class="section-inner">
+    <div class="section-label">Industries</div>
+    <h2 class="section-title">One platform.<br><em>Every industry.</em></h2>
+    <p class="section-desc">
+      The vocabulary reconfigures. The engine doesn't. A single JSON file
+      transforms the entire interface — from concert stage to operating
+      theater to mission control.
+    </p>
+    <div class="industries-strip">
+      <div class="industry-card"><div class="industry-icon">🎬</div><div class="industry-title">Virtual Production</div><div class="industry-body">LED volume control. SMPTE sync. Director-facing interface. Camera tracking parallax.</div></div>
+      <div class="industry-card"><div class="industry-icon">🎤</div><div class="industry-title">Live Events</div><div class="industry-body">Cue-driven show control. Multi-surface sync. Real-time Lumen GI. Proven at Sphere Las Vegas.</div></div>
+      <div class="industry-card"><div class="industry-icon">🏛</div><div class="industry-title">Architecture</div><div class="industry-body">BIM-to-UE5 instant digital twins. Live sensor data rendered as physically accurate light.</div></div>
+      <div class="industry-card"><div class="industry-icon">🏥</div><div class="industry-title">Surgical Navigation</div><div class="industry-body">DICOM imaging in Nanite anatomy. Lumen subsurface scattering for tissue visualization.</div></div>
+      <div class="industry-card"><div class="industry-icon">🚀</div><div class="industry-title">Space Operations</div><div class="industry-body">Real-time rover telemetry in physically accurate environments. Battery data dims lighting.</div></div>
+      <div class="industry-card"><div class="industry-icon">🚨</div><div class="industry-title">Emergency Response</div><div class="industry-body">Building fire sensors drive zone heat visualization. Crowd flow as fluid dynamics.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <div class="section-label">Access Plans</div>
+    <h2 class="section-title">Start free.<br><em>Scale to enterprise.</em></h2>
+    <p class="section-desc" style="margin-bottom:16px">
+      Every tier runs the same core UE5 engine. What scales is the surface
+      count, data ingestion, AI capability, and dedicated support.
+    </p>
+    <div class="pricing-toggle">
+      <button class="toggle-label active" id="monthlyLabel" onclick="setYearly(false)">Monthly</button>
+      <div class="toggle-track" id="toggleTrack" onclick="setYearly(!window._yearly)">
+        <div class="toggle-thumb off" id="toggleThumb"></div>
+      </div>
+      <button class="toggle-label inactive" id="yearlyLabel" onclick="setYearly(true)">Yearly <span class="save-badge">Save 15%</span></button>
+    </div>
+    <div class="pricing-grid" id="pricingGrid"></div>
+  </div>
+</section>
+
+<!-- INVESTOR -->
+<section class="section bg-deep" id="about" style="border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border))">
+  <div class="section-inner">
+    <div class="section-label">For Investors</div>
+    <h2 class="section-title">The spatial layer<br><em>nobody has built.</em></h2>
+    <div class="investor-grid">
+      <div class="investor-stats">
+        <div class="investor-stat"><div class="investor-stat-num">$384B</div><div class="investor-stat-label">Digital Twin Market by 2034 · 35% CAGR</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">$16.7B</div><div class="investor-stat-label">Virtual Production Market by 2035</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">6%</div><div class="investor-stat-label">Top 10 Players' Combined Market Share</div></div>
+        <div class="investor-stat"><div class="investor-stat-num">5</div><div class="investor-stat-label">Industries Addressable with One Platform</div></div>
+      </div>
+      <div>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          Every industry that operates in physical space shares the same
+          problem: the data that describes what is happening lives in flat
+          screens, disconnected from the 3D reality it represents.
+        </p>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          GRIDtRAVELER Labs is building <strong style="color:hsl(var(--foreground))">the first universal spatial intelligence platform</strong>
+          — the infrastructure layer that makes any physical environment
+          programmable, data-responsive, and AI-controlled in real time.
+        </p>
+        <p class="section-desc" style="max-width:100%;margin-bottom:20px">
+          The platform is proven in the world's most technically demanding
+          environments — Sphere Las Vegas, Morgan Wallen world tour, Volvo
+          Group digital twins. <strong style="color:hsl(var(--foreground))">Live events are the R&D lab. Every other industry is the market.</strong>
+        </p>
+        <div class="gold-line"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:hsl(var(--dim));margin-bottom:16px">Investor Inquiries</div>
+        <a href="#contact" class="btn btn-gold">Request Investor Deck →</a>
+        <p style="font-size:12px;color:hsl(var(--dim));font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-top:12px">NDA available on request · Actively seeking strategic partners</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="section bg-background" id="contact">
+  <div class="signup">
+    <div class="section-label" style="justify-content:center">Early Access</div>
+    <h2>Join the<br><em>spatial future.</em></h2>
+    <p class="section-desc" style="max-width:100%;text-align:center;margin-bottom:48px">
+      Request access to the GRIDtRAVELER platform. We onboard in cohorts —
+      tell us your use case and we'll reach out within 48 hours.
+    </p>
+    <form onsubmit="event.preventDefault();this.innerHTML='<div style=\'border:1px solid hsl(var(--primary));padding:48px;background:hsl(var(--surface))\'><div style=\'font-size:36px;margin-bottom:20px\'>✦</div><div class=\'font-display\' style=\'font-size:36px;font-weight:300;color:hsl(var(--primary));margin-bottom:12px\'>Access Requested</div><p style=\'font-size:14px;color:hsl(var(--muted-foreground));line-height:1.7\'>You\'re in the queue. We review applications in cohorts and will reach out within 48 hours.</p></div>'">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" placeholder="First name" required></div>
+        <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" placeholder="Last name" required></div>
+      </div>
+      <div class="form-group"><label class="form-label">Work Email</label><input type="email" class="form-input" placeholder="you@company.com" required></div>
+      <div class="form-group">
+        <label class="form-label">Primary Use Case</label>
+        <select class="form-select" required>
+          <option value="" disabled selected>Select your industry</option>
+          <option>Virtual Film Production / LED Volume</option>
+          <option>Live Events / Concert Production</option>
+          <option>Architecture / Real Estate</option>
+          <option>Surgical / Medical Navigation</option>
+          <option>Space / Defense / Government</option>
+          <option>Independent Developer / Research</option>
+          <option>Investor / Partnership Inquiry</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-gold btn-full" style="padding:16px;font-size:15px;font-weight:700;margin-top:8px">Request Access →</button>
+      <p class="form-note">No spam. No sales calls unless you ask. Early access users shape the roadmap.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="nav-logo" style="margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <div class="nav-logo-box">GT</div>
+        <div class="nav-brand">GRID<span class="text-primary">t</span>RAVELER <span class="text-dim">LABS</span></div>
+      </a>
+      <p class="footer-desc">Real-time spatial intelligence built on Unreal Engine 5. Transforming physical environments across film, events, architecture, medicine, and space.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Platform</div>
+      <div class="footer-links">
+        <a href="#platform">Products</a><a href="#industries">Services</a><a href="#pricing">Pricing</a><a href="#research">Research</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <div class="footer-links">
+        <a href="#about">About</a><a href="#contact">Contact</a><a href="#">Case Studies</a><a href="#">Login</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Built With</div>
+      <div class="footer-links">
+        <span>Unreal Engine 5</span><span>Lumen · Nanite</span><span>Niagara · nDisplay</span><span>Pixel Streaming</span><span>Claude AI</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GRIDtRAVELER Labs · All Rights Reserved</span>
+    <span>Spatial Intelligence Platform · UE5 Native</span>
+  </div>
+</footer>
+
+<script>
+window._yearly = false;
+var tiers = [
+  {tier:"Tier 00",name:"Explorer",tagline:"For developers, students, and independent artists exploring the platform.",monthly:0,yearly:0,period:"Free forever",features:[{t:"1 output surface",a:1},{t:"Pixel Streaming up to 720p",a:1},{t:"Data Fabric Plugin (WebSocket + OSC)",a:1},{t:"Blueprint control layer",a:1},{t:"Community Discord access",a:1},{t:"AI Director",a:0},{t:"nDisplay multi-surface",a:0},{t:"Priority support",a:0}],cta:"Get Started Free",btnClass:"btn-ghost-gold",featured:false},
+  {tier:"Tier 01",name:"Studio",tagline:"For production companies, boutique studios, and independent technical directors.",monthly:299,yearly:249,period:"per month",features:[{t:"Up to 6 output surfaces",a:1},{t:"Pixel Streaming 4K cloud delivery",a:1},{t:"Full Data Fabric (all protocols)",a:1},{t:"AI Director — 500 commands/mo",a:1},{t:"Vocabulary config system",a:1},{t:"nDisplay 2-node sync",a:1},{t:"SMPTE / LTC timecode integration",a:1},{t:"Email support — 48hr response",a:1}],cta:"Start Studio Trial",btnClass:"btn-gold",featured:true},
+  {tier:"Tier 02",name:"Production",tagline:"For AV companies, touring productions, and permanent installation operators.",monthly:999,yearly:849,period:"per month",features:[{t:"Unlimited output surfaces",a:1},{t:"Multi-cloud Pixel Streaming",a:1},{t:"AI Director — unlimited",a:1},{t:"nDisplay full cluster sync",a:1},{t:"Remote multi-user collaboration",a:1},{t:"Venue digital twin pipeline",a:1},{t:"Priority email + Slack support",a:1},{t:"White-label option available",a:1}],cta:"Start Production Trial",btnClass:"btn-outline",featured:false},
+  {tier:"Tier 03",name:"Enterprise",tagline:"For studios, defense, medical institutions, and global event operators.",monthly:-1,yearly:-1,period:"annual contract · starting $50,000",features:[{t:"Dedicated cloud rendering instance",a:1},{t:"Custom vocabulary development",a:1},{t:"DICOM / defense data integration",a:1},{t:"On-premise deployment option",a:1},{t:"SLA — 99.9% uptime guaranteed",a:1},{t:"24/7 dedicated technical support",a:1},{t:"Source code access",a:1},{t:"Executive partnership relationship",a:1}],cta:"Contact Enterprise Sales",btnClass:"btn-ghost-gold",featured:false}
+];
+
+function renderPricing(){
+  var g=document.getElementById('pricingGrid');
+  g.innerHTML='';
+  tiers.forEach(function(t){
+    var price=window._yearly?t.yearly:t.monthly;
+    var card=document.createElement('div');
+    card.className='pricing-card'+(t.featured?' featured':'');
+    var h='';
+    if(t.featured)h+='<div class="popular-badge">MOST POPULAR</div>';
+    h+='<div class="tier-label"'+(t.featured?' style="margin-top:20px"':'')+'>'+t.tier+'</div>';
+    h+='<div class="tier-name">'+t.name+'</div>';
+    h+='<div class="tier-tagline">'+t.tagline+'</div>';
+    h+='<div class="tier-price">';
+    if(price>=0){h+='<span class="tier-dollar">$</span><span class="tier-amount">'+price+'</span>';}
+    else{h+='<span class="tier-custom">Custom</span>';}
+    h+='</div>';
+    var periodText=price===0?'Free forever':t.period;
+    if(window._yearly&&t.yearly>0)periodText+=' · billed annually';
+    h+='<div class="tier-period">'+periodText+'</div>';
+    h+='<div class="tier-divider"></div>';
+    h+='<div class="tier-features">';
+    t.features.forEach(function(f){
+      h+='<div class="tier-feature '+(f.a?'active':'inactive')+'"><span class="arrow">→</span>'+f.t+'</div>';
+    });
+    h+='</div>';
+    h+='<a href="#contact" class="btn '+t.btnClass+' btn-full">'+t.cta+'</a>';
+    card.innerHTML=h;
+    g.appendChild(card);
+  });
+}
+
+function setYearly(v){
+  window._yearly=v;
+  document.getElementById('monthlyLabel').className='toggle-label '+(v?'inactive':'active');
+  document.getElementById('yearlyLabel').className='toggle-label '+(v?'active':'inactive');
+  document.getElementById('toggleTrack').className='toggle-track '+(v?'on':'');
+  document.getElementById('toggleThumb').className='toggle-thumb '+(v?'on':'off');
+  renderPricing();
+}
+
+renderPricing();
+</script>
+</body>
+</html>
