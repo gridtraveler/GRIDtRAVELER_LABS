@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrey Shcherbinin — Real-Time Spatial Intelligence</title>
+<meta name="description" content="Andrey Shcherbinin — Creative Technology Director. Real-time spatial intelligence, Unreal Engine 5, XR & virtual production. Sphere Las Vegas · Riot Games · Disney · Live Nation · Volvo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#000000;
+    --ink:#0a0a0c;
+    --amber:#FFB347;
+    --coral:#FF6B4A;
+    --red:#C42E2E;
+    --fog:rgba(255,255,255,0.06);
+    --fog-2:rgba(255,255,255,0.04);
+    --edge:rgba(255,255,255,0.12);
+    --edge-soft:rgba(255,255,255,0.07);
+    --text:#f4f3f1;
+    --text-dim:#9b9a98;
+    --text-faint:#5d5c5a;
+    --display:'Space Grotesk',sans-serif;
+    --body:'Inter',sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--void);
+    color:var(--text);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--coral);color:#000}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- WebGL canvas hero backdrop ---------- */
+  #scan{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    width:100%;height:100%;
+    display:block;
+  }
+  .vignette{
+    position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,0.55) 78%,#000 100%);
+  }
+  .grain{
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+
+  .wrap{position:relative;z-index:2}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);
+    transition:background .4s ease,backdrop-filter .4s ease,border-color .4s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.solid{
+    background:rgba(6,6,8,0.55);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border-bottom:1px solid var(--edge-soft);
+  }
+  .brand{font-family:var(--display);font-weight:600;letter-spacing:.14em;font-size:15px;text-transform:uppercase}
+  .brand span{color:var(--coral)}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:var(--text-dim);transition:color .3s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;
+    padding:8px 16px;border:1px solid var(--edge);border-radius:999px;color:var(--text)!important;
+    transition:all .3s;
+  }
+  .nav-cta:hover{background:var(--coral);border-color:var(--coral);color:#000!important}
+  .menu-btn{display:none;background:none;border:none;color:var(--text);cursor:pointer;font-family:var(--mono);font-size:13px}
+
+  /* ---------- Hero ---------- */
+  header{
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:0 clamp(20px,5vw,64px);position:relative;
+  }
+  .eyebrow{
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--coral);margin-bottom:26px;
+    opacity:0;animation:fadeUp .9s .2s forwards;
+  }
+  h1{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(2.7rem,8.2vw,7.4rem);
+    line-height:0.98;letter-spacing:-0.025em;
+    max-width:14ch;
+  }
+  h1 .line{display:block;overflow:hidden}
+  h1 .line span{display:block;transform:translateY(110%);animation:rise 1s forwards cubic-bezier(.16,1,.3,1)}
+  h1 .line:nth-child(1) span{animation-delay:.35s}
+  h1 .line:nth-child(2) span{animation-delay:.47s}
+  h1 .line:nth-child(3) span{animation-delay:.59s}
+  h1 .grad{
+    background:linear-gradient(100deg,var(--amber),var(--coral) 55%,var(--red));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{
+    margin-top:32px;max-width:52ch;font-size:clamp(1rem,1.5vw,1.18rem);
+    color:var(--text-dim);font-weight:300;
+    opacity:0;animation:fadeUp .9s .85s forwards;
+  }
+  .hero-meta{
+    margin-top:42px;display:flex;flex-wrap:wrap;gap:14px;
+    opacity:0;animation:fadeUp .9s 1s forwards;
+  }
+  .chip{
+    font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--text-dim);
+    padding:9px 15px;border:1px solid var(--edge-soft);border-radius:999px;
+    background:var(--fog-2);backdrop-filter:blur(8px);
+  }
+  .scroll-hint{
+    position:absolute;bottom:34px;left:clamp(20px,5vw,64px);
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-faint);
+    display:flex;align-items:center;gap:12px;
+    opacity:0;animation:fadeUp .9s 1.3s forwards;
+  }
+  .scroll-hint .bar{width:46px;height:1px;background:var(--text-faint);position:relative;overflow:hidden}
+  .scroll-hint .bar::after{content:"";position:absolute;inset:0;background:var(--coral);transform:translateX(-100%);animation:sweep 2.4s infinite}
+
+  @keyframes rise{to{transform:translateY(0)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes sweep{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
+
+  /* ---------- Section frame ---------- */
+  section{padding:clamp(80px,11vw,150px) clamp(20px,5vw,64px);position:relative}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:54px;flex-wrap:wrap}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--coral);letter-spacing:.1em}
+  .sec-title{font-family:var(--display);font-weight:500;font-size:clamp(1.6rem,3.6vw,2.7rem);letter-spacing:-.02em}
+  .sec-line{flex:1;height:1px;background:var(--edge-soft);min-width:40px}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+
+  /* glass card base */
+  .glass{
+    background:var(--fog);
+    border:1px solid var(--edge-soft);
+    border-radius:18px;
+    backdrop-filter:blur(20px) saturate(135%);
+    -webkit-backdrop-filter:blur(20px) saturate(135%);
+    position:relative;overflow:hidden;
+  }
+  .glass::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(135deg,rgba(255,255,255,0.09),transparent 42%);
+  }
+
+  /* ---------- Marquee credits ---------- */
+  .marquee{overflow:hidden;border-top:1px solid var(--edge-soft);border-bottom:1px solid var(--edge-soft);padding:26px 0;background:rgba(255,255,255,0.015)}
+  .marquee-track{display:flex;gap:62px;width:max-content;animation:scrollx 32s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track span{font-family:var(--display);font-weight:500;font-size:clamp(1.1rem,2.4vw,1.7rem);color:var(--text-faint);letter-spacing:.01em;white-space:nowrap;transition:color .3s}
+  .marquee-track span:hover{color:var(--text)}
+  .marquee-track .dot{color:var(--coral)}
+  @keyframes scrollx{to{transform:translateX(-50%)}}
+
+  /* ---------- About / stats ---------- */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
+  .about-lead{font-family:var(--display);font-weight:400;font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.32;letter-spacing:-.01em}
+  .about-lead b{color:var(--coral);font-weight:500}
+  .about-body{margin-top:24px;color:var(--text-dim);max-width:60ch}
+  .stat-stack{display:flex;flex-direction:column;gap:16px}
+  .stat{padding:24px 26px}
+  .stat .n{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,4vw,2.6rem);line-height:1;
+    background:linear-gradient(100deg,var(--amber),var(--coral));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--text-dim);margin-top:10px;text-transform:uppercase}
+
+  /* ---------- Capabilities ---------- */
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .cap{padding:30px 28px;transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .5s}
+  .cap:hover{transform:translateY(-6px);border-color:var(--edge)}
+  .cap .k{font-family:var(--mono);font-size:11px;color:var(--coral);letter-spacing:.12em;margin-bottom:16px}
+  .cap h3{font-family:var(--display);font-weight:500;font-size:1.25rem;margin-bottom:12px;letter-spacing:-.01em}
+  .cap p{color:var(--text-dim);font-size:.95rem}
+
+  /* ---------- Work timeline ---------- */
+  .work-list{display:flex;flex-direction:column}
+  .work-item{
+    display:grid;grid-template-columns:120px 1fr auto;gap:30px;align-items:center;
+    padding:30px 30px;border:1px solid transparent;border-radius:16px;
+    transition:background .45s,border-color .45s,padding .45s;cursor:default;
+    border-bottom:1px solid var(--edge-soft);
+  }
+  .work-item:hover{background:var(--fog-2);border-color:var(--edge-soft);border-radius:16px}
+  .work-item .yr{font-family:var(--mono);font-size:12.5px;color:var(--text-faint);letter-spacing:.02em}
+  .work-item .role{font-family:var(--display);font-weight:500;font-size:clamp(1.05rem,2vw,1.4rem);letter-spacing:-.01em}
+  .work-item .org{color:var(--coral);font-size:.92rem;margin-top:5px;font-family:var(--mono);letter-spacing:.02em}
+  .work-item .tag{font-family:var(--mono);font-size:11px;color:var(--text-dim);text-align:right;max-width:24ch}
+  @media(max-width:760px){
+    .work-item{grid-template-columns:1fr;gap:8px;padding:22px 4px}
+    .work-item .tag{text-align:left;max-width:none}
+  }
+
+  /* ---------- Portfolio / links ---------- */
+  .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .link-card{
+    padding:40px 36px;min-height:230px;display:flex;flex-direction:column;justify-content:space-between;
+    transition:transform .55s cubic-bezier(.16,1,.3,1);
+  }
+  .link-card:hover{transform:translateY(-8px)}
+  .link-card .lc-top{display:flex;align-items:center;justify-content:space-between}
+  .link-card .lc-k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--coral);text-transform:uppercase}
+  .link-card .arrow{font-size:1.4rem;transition:transform .4s}
+  .link-card:hover .arrow{transform:translate(5px,-5px)}
+  .link-card h3{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.3rem);letter-spacing:-.02em;margin-top:auto}
+  .link-card p{color:var(--text-dim);font-size:.92rem;margin-top:8px}
+
+  /* ---------- Contact ---------- */
+  .contact-wrap{text-align:center;max-width:760px;margin:0 auto}
+  .contact-wrap h2{font-family:var(--display);font-weight:600;font-size:clamp(2.2rem,6vw,4.5rem);letter-spacing:-.03em;line-height:1.02}
+  .contact-wrap h2 .grad{background:linear-gradient(100deg,var(--amber),var(--coral),var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .contact-actions{margin-top:42px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:13.5px;letter-spacing:.04em;padding:15px 30px;border-radius:999px;
+    transition:all .35s;border:1px solid var(--edge);
+  }
+  .btn-primary{background:var(--coral);color:#000;border-color:var(--coral)}
+  .btn-primary:hover{background:var(--amber);border-color:var(--amber);transform:translateY(-3px)}
+  .btn-ghost:hover{background:var(--fog);border-color:var(--edge);transform:translateY(-3px)}
+
+  footer{padding:40px clamp(20px,5vw,64px);border-top:1px solid var(--edge-soft);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .f-brand{font-family:var(--display);font-weight:600;letter-spacing:.14em;font-size:13px;text-transform:uppercase}
+  footer .f-brand span{color:var(--coral)}
+  footer .f-meta{font-family:var(--mono);font-size:11.5px;color:var(--text-faint)}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:880px){
+    .about-grid{grid-template-columns:1fr}
+    .cap-grid{grid-template-columns:1fr}
+    .links-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .menu-btn{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    h1 .line span{transform:none}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scan"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<div class="wrap">
+
+  <nav id="nav">
+    <div class="brand">GRID<span>t</span>RAVELER</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#work">Work</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact" class="nav-cta">Get in touch</a>
+    </div>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Creative Technology Director — Real-Time Spatial Intelligence</div>
+    <h1>
+      <span class="line"><span>Andrey</span></span>
+      <span class="line"><span>Shcherbinin</span></span>
+      <span class="line"><span class="grad">builds worlds that breathe.</span></span>
+    </h1>
+    <p class="sub">A decade engineering real-time visualization, XR, and virtual production natively inside Unreal Engine 5 — turning complex product and performance goals into stable, repeatable, high-fidelity immersive systems.</p>
+    <div class="hero-meta">
+      <span class="chip">Unreal Engine 5</span>
+      <span class="chip">XR / VR / MR</span>
+      <span class="chip">Virtual Production</span>
+      <span class="chip">Blueprints + C++</span>
+      <span class="chip">Real-Time VFX</span>
+    </div>
+    <div class="scroll-hint"><span class="bar"></span> Scroll to explore</div>
+  </header>
+
+  <!-- credits marquee -->
+  <div class="marquee" aria-label="Selected clients and productions">
+    <div class="marquee-track">
+      <span>Sphere Las Vegas</span><span class="dot">·</span>
+      <span>Riot Games</span><span class="dot">·</span>
+      <span>Disney</span><span class="dot">·</span>
+      <span>Live Nation</span><span class="dot">·</span>
+      <span>Volvo Group</span><span class="dot">·</span>
+      <span>Morgan Wallen Tour</span><span class="dot">·</span>
+      <span>Katy Perry</span><span class="dot">·</span>
+      <span>Deloitte</span><span class="dot">·</span>
+      <span>The Weather Channel</span><span class="dot">·</span>
+      <!-- duplicate for seamless loop -->
+      <span>Sphere Las Vegas</span><span class="dot">·</span>
+      <span>Riot Games</span><span class="dot">·</span>
+      <span>Disney</span><span class="dot">·</span>
+      <span>Live Nation</span><span class="dot">·</span>
+      <span>Volvo Group</span><span class="dot">·</span>
+      <span>Morgan Wallen Tour</span><span class="dot">·</span>
+      <span>Katy Perry</span><span class="dot">·</span>
+      <span>Deloitte</span><span class="dot">·</span>
+      <span>The Weather Channel</span><span class="dot">·</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <span class="sec-title">Profile</span>
+      <span class="sec-line"></span>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="about-lead">I design <b>immersive systems</b> — not one-off scenes. Clean Blueprint architecture, data-driven logic, and reusable templates that hold up under production pressure and live audiences.</p>
+        <p class="about-body">Unreal Engine technical designer with 10+ years across real-time visualization, immersive design review, XR, and production-ready 3D for technical and customer-facing environments. From photoreal automotive digital twins at Volvo to mission-critical Niagara systems for Deloitte's flagship show at the Las Vegas Sphere, I turn complex product goals into stable, repeatable experiences — known for technical problem solving, visual polish, and building efficient pipelines that cut production time.</p>
+      </div>
+      <div class="stat-stack reveal">
+        <div class="stat glass"><div class="n">10+</div><div class="l">Years in real-time</div></div>
+        <div class="stat glass"><div class="n">20,000+</div><div class="l">Live attendees · Sphere LV</div></div>
+        <div class="stat glass"><div class="n">5M+</div><div class="l">Virtual viewers reached</div></div>
+        <div class="stat glass"><div class="n">55%</div><div class="l">VFX iteration time cut</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <span class="sec-title">Capabilities</span>
+      <span class="sec-line"></span>
+    </div>
+    <div class="cap-grid">
+      <div class="cap glass reveal">
+        <div class="k">UE5 · XR</div>
+        <h3>VR & XR Development</h3>
+        <p>PCVR, Quest, and Windows builds. OpenXR / C++ apps with Varjo XR4 and Ultraleap hand tracking. Locomotion, interaction design, user comfort, scene stability.</p>
+      </div>
+      <div class="cap glass reveal">
+        <div class="k">ARCHITECTURE</div>
+        <h3>Blueprint Systems</h3>
+        <p>Modular components, reusable frameworks, data-driven logic with DataTables, structs & enums. Clean naming, project organization, scalable production workflows.</p>
+      </div>
+      <div class="cap glass reveal">
+        <div class="k">REAL-TIME</div>
+        <h3>VFX & Niagara</h3>
+        <p>GPU-optimized Niagara systems, sound-reactive shaders, adaptive volumetric rendering, and DMX-driven lighting synchronized to live performance narratives.</p>
+      </div>
+      <div class="cap glass reveal">
+        <div class="k">DIGITAL TWIN</div>
+        <h3>Visualization</h3>
+        <p>Photoreal automotive & aerospace design review, immersive storytelling, lighting and materials, scale and realism for stakeholder and customer-facing clarity.</p>
+      </div>
+      <div class="cap glass reveal">
+        <div class="k">PERFORMANCE</div>
+        <h3>Optimization</h3>
+        <p>VR profiling, framerate targets, asset & lighting budgets, build stability and deployment testing — consistent performance across PC and mobile hardware.</p>
+      </div>
+      <div class="cap glass reveal">
+        <div class="k">VIRTUAL PRODUCTION</div>
+        <h3>LED Volume</h3>
+        <p>Real-time UE5 environments for stage LED volumes and broadcast. Sequencer, MRQ delivery, camera setup, and live ecosystem operation for large-scale events.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Selected Work</span>
+      <span class="sec-line"></span>
+    </div>
+    <div class="work-list">
+      <div class="work-item reveal">
+        <div class="yr">2024 – 25</div>
+        <div><div class="role">Real-Time 3D Automotive Visualization Engineer</div><div class="org">Volvo Group — North America</div></div>
+        <div class="tag">Photoreal vehicle digital twins · OpenXR C++ · Varjo XR4 · multi-user VR review</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2024</div>
+        <div><div class="role">UE5 Tech Lead / Niagara VFX Designer</div><div class="org">Deloitte — Las Vegas Sphere</div></div>
+        <div class="tag">Mission-critical VFX for 20,000+ attendees · adaptive volumetric rendering</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2022 – 24</div>
+        <div><div class="role">UE5 Tech Lead / Real-Time VFX</div><div class="org">Raw Cereal — Morgan Wallen World Tour</div></div>
+        <div class="tag">Interactive UE5 environments & Niagara for stage LED volumes · Disguise</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2023 – 24</div>
+        <div><div class="role">UE Developer / Technical Lead Artist</div><div class="org">Possible — Riot Games Worlds 2024</div></div>
+        <div class="tag">Mixed-reality VFX for large-scale live TV · League of Legends, South Korea</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2021</div>
+        <div><div class="role">UE5 Generalist / Character & VFX</div><div class="org">Katy Perry — Play Las Vegas</div></div>
+        <div class="tag">IMAX-scale visuals · mocap · grooms · Sequencer · MRQ cinematics</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2022 – 23</div>
+        <div><div class="role">Sr. Environment Artist / Virtual Production</div><div class="org">The Weather Channel</div></div>
+        <div class="tag">24/7 real-time rendered immersive weather · C++ Blueprint environments</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2018 – 20</div>
+        <div><div class="role">VR/AR Technical Artist · Software Architect</div><div class="org">Duke Energy</div></div>
+        <div class="tag">Training & education VR · Quest/Vive/Rift · optimized immersion at high FPS</div>
+      </div>
+      <div class="work-item reveal">
+        <div class="yr">2018</div>
+        <div><div class="role">VFX / VR Generalist · 3D Animator</div><div class="org">Live Nation Entertainment</div></div>
+        <div class="tag">3D assets & visualization integrated with live footage · Cannes short</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO LINKS -->
+  <section id="portfolio">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <span class="sec-title">Portfolio & Channels</span>
+      <span class="sec-line"></span>
+    </div>
+    <div class="links-grid">
+      <a class="link-card glass reveal" href="https://www.artstation.com/gridtraveler" target="_blank" rel="noopener">
+        <div class="lc-top"><span class="lc-k">Digital Works</span><span class="arrow">↗</span></div>
+        <div><h3>ArtStation</h3><p>3D, VFX, real-time renders & technical art</p></div>
+      </a>
+      <a class="link-card glass reveal" href="https://www.linkedin.com/in/gridtraveler/" target="_blank" rel="noopener">
+        <div class="lc-top"><span class="lc-k">Professional</span><span class="arrow">↗</span></div>
+        <div><h3>LinkedIn</h3><p>Full work history & creative technology direction</p></div>
+      </a>
+      <a class="link-card glass reveal" href="https://soundcloud.com/gridtraveler" target="_blank" rel="noopener">
+        <div class="lc-top"><span class="lc-k">Sound Design</span><span class="arrow">↗</span></div>
+        <div><h3>SoundCloud</h3><p>Psybient / downtempo · original sound design</p></div>
+      </a>
+      <a class="link-card glass reveal" href="https://gridtravelerlabs.com" target="_blank" rel="noopener">
+        <div class="lc-top"><span class="lc-k">Studio</span><span class="arrow">↗</span></div>
+        <div><h3>GRIDtRAVELER Labs</h3><p>SYL — real-time spatial intelligence on UE5</p></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrap reveal">
+      <h2>Let's build something <span class="grad">that breathes.</span></h2>
+      <div class="contact-actions">
+        <a class="btn btn-primary" href="mailto:gridtraveler@gmail.com">gridtraveler@gmail.com</a>
+        <a class="btn btn-ghost" href="tel:+19808440771">(980) 844-0771</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/gridtraveler/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="f-brand">GRID<span>t</span>RAVELER</div>
+    <div class="f-meta">U.S. Citizen · Casablanca / Los Angeles · Built in real time</div>
+  </footer>
+
+</div>
+
+<script>
+/* ---------------- WebGL spatial point-cloud hero ---------------- */
+(function(){
+  const canvas=document.getElementById('scan');
+  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const gl=canvas.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:false});
+  if(!gl){canvas.style.background='radial-gradient(circle at 50% 35%,#1a0d08,#000)';return;}
+
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;
+    canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
+    gl.viewport(0,0,canvas.width,canvas.height);
+  }
+  resize();addEventListener('resize',resize);
+
+  // build a torus-knot-ish swirling point field — reads as a "spatial scan"
+  const N= (innerWidth<700)?5500:11000;
+  const pos=new Float32Array(N*3);
+  const seed=new Float32Array(N);
+  for(let i=0;i<N;i++){
+    // distribute on a wavy disc / shell
+    const a=Math.random()*Math.PI*2;
+    const r=Math.pow(Math.random(),0.5)*1.9;
+    const y=(Math.random()-0.5)*0.9;
+    pos[i*3]=Math.cos(a)*r;
+    pos[i*3+1]=y + Math.sin(r*3.0)*0.18;
+    pos[i*3+2]=Math.sin(a)*r;
+    seed[i]=Math.random();
+  }
+
+  const vs=`
+    attribute vec3 p; attribute float s;
+    uniform float t; uniform mat4 proj; uniform mat4 view; uniform float aspect; uniform vec2 mouse;
+    varying float v;
+    void main(){
+      vec3 q=p;
+      float w=sin(q.x*1.5 + t*0.6)*0.12 + cos(q.z*1.7 - t*0.5)*0.12;
+      q.y+=w + sin(t*0.3+s*6.28)*0.04;
+      // gentle swirl
+      float ang=t*0.06 + length(q.xz)*0.15;
+      float ca=cos(ang),sa=sin(ang);
+      q.xz=mat2(ca,-sa,sa,ca)*q.xz;
+      // mouse parallax
+      q.x+=mouse.x*0.25; q.y+=mouse.y*0.15;
+      vec4 mv=view*vec4(q,1.0);
+      gl_Position=proj*mv;
+      gl_PointSize=(2.2 + s*2.0) * (3.0/ -mv.z);
+      v=clamp((q.y+1.0)*0.5,0.0,1.0)+s*0.3;
+    }`;
+  const fs=`
+    precision mediump float; varying float v;
+    void main(){
+      vec2 c=gl_PointCoord-0.5;
+      float d=dot(c,c);
+      if(d>0.25) discard;
+      float al=smoothstep(0.25,0.0,d);
+      // amber -> coral -> red gradient by height
+      vec3 amber=vec3(1.0,0.70,0.28);
+      vec3 coral=vec3(1.0,0.42,0.29);
+      vec3 red=vec3(0.77,0.18,0.18);
+      vec3 col=mix(red,coral,smoothstep(0.0,0.55,v));
+      col=mix(col,amber,smoothstep(0.5,1.0,v));
+      gl_FragColor=vec4(col,al*0.85);
+    }`;
+  function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  const prog=gl.createProgram();
+  gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));
+  gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(prog);gl.useProgram(prog);
+
+  const pb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,pb);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.STATIC_DRAW);
+  const pl=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(pl);gl.vertexAttribPointer(pl,3,gl.FLOAT,false,0,0);
+  const sb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,sb);gl.bufferData(gl.ARRAY_BUFFER,seed,gl.STATIC_DRAW);
+  const sl=gl.getAttribLocation(prog,'s');gl.enableVertexAttribArray(sl);gl.vertexAttribPointer(sl,1,gl.FLOAT,false,0,0);
+
+  const uT=gl.getUniformLocation(prog,'t');
+  const uProj=gl.getUniformLocation(prog,'proj');
+  const uView=gl.getUniformLocation(prog,'view');
+  const uMouse=gl.getUniformLocation(prog,'mouse');
+
+  function perspective(fov,asp,n,f){
+    const t=1/Math.tan(fov/2);
+    return new Float32Array([t/asp,0,0,0, 0,t,0,0, 0,0,(f+n)/(n-f),-1, 0,0,(2*f*n)/(n-f),0]);
+  }
+  // simple lookAt-ish: camera pulled back & up
+  function view(){
+    const z=-4.2, y=-0.15;
+    return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,y,z,1]);
+  }
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE); // additive glow
+  gl.clearColor(0,0,0,0);
+
+  let mx=0,my=0,tmx=0,tmy=0;
+  addEventListener('mousemove',e=>{tmx=(e.clientX/innerWidth-0.5)*2;tmy=-(e.clientY/innerHeight-0.5)*2;});
+
+  let start=performance.now();
+  function frame(now){
+    const t=reduce?0:(now-start)/1000;
+    mx+=(tmx-mx)*0.04;my+=(tmy-my)*0.04;
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(uT,t);
+    gl.uniformMatrix4fv(uProj,false,perspective(1.05,innerWidth/innerHeight,0.1,100));
+    gl.uniformMatrix4fv(uView,false,view());
+    gl.uniform2f(uMouse,mx,my);
+    gl.drawArrays(gl.POINTS,0,N);
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  if(reduce){frame(performance.now());}
+})();
+
+/* ---------------- nav solidify + scroll reveals ---------------- */
+(function(){
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>{nav.classList.toggle('solid',scrollY>40);});
+
+  const els=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        // light stagger for grouped items
+        const sibs=[...e.target.parentElement.querySelectorAll('.reveal')];
+        const idx=sibs.indexOf(e.target);
+        e.target.style.transitionDelay=(Math.max(0,idx)%6*0.06)+'s';
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
