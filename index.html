@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRIDtRAVELER Labs, Real Time Worlds, Simulation, XR, Unreal Engine and Houdini</title>
+<meta name="description" content="GRIDtRAVELER Labs is a creative technology and realtime visualization lab for Unreal Engine, Houdini FX, XR, virtual production, vehicle simulation, procedural environments, realtime VFX, spatial design systems, and field notes on AI and creativity.">
+<meta name="author" content="GRIDtRAVELER Labs, Andrey Shcherbinin">
+<meta name="theme-color" content="#FF6B4A">
+<meta property="og:title" content="GRIDtRAVELER Labs, Real Time Worlds and Simulation Systems">
+<meta property="og:description" content="A creative technology lab for realtime 3D, Unreal Engine, Houdini FX, XR, vehicle simulation, procedural environments, and cinematic systems.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gridtravelerlabs.com/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"GRIDtRAVELER Labs",
+  "url":"https://gridtravelerlabs.com/",
+  "founder":{
+    "@type":"Person",
+    "name":"Andrey Shcherbinin",
+    "url":"https://gridtravelerlabs.com/profile.html",
+    "sameAs":["https://www.linkedin.com/in/gridtraveler/","https://www.artstation.com/gridtraveler"]
+  },
+  "description":"Creative technology lab for realtime 3D, Unreal Engine, Houdini FX, XR, simulation systems, virtual production, procedural environments, vehicle visualization, and spatial design.",
+  "sameAs":["https://www.linkedin.com/in/gridtraveler/","https://www.artstation.com/gridtraveler","https://github.com/gridtraveler/GRIDtRAVELER_LABS"]
+}
+</script>
+<style>
+:root{
+  --black:#000000;
+  --deep:#0a0a0c;
+  --panel:rgba(255,255,255,.06);
+  --panel2:rgba(255,255,255,.04);
+  --glass:rgba(255,255,255,.06);
+  --edge:rgba(255,255,255,.12);
+  --edge2:rgba(255,107,74,.45);
+  --line:rgba(255,255,255,.07);
+  --text:#f4f3f1;
+  --muted:#9b9a98;
+  --dim:#5d5c5a;
+  --coral:#FF6B4A;
+  --red:#C42E2E;
+  --amber:#FFB347;
+  --font:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --display:'Space Grotesk',var(--font);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --radius:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--black)}
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:var(--font);
+  font-size:16px;
+  line-height:1.65;
+  overflow-x:hidden;
+  background:var(--black);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,.55) 78%,#000 100%);
+}
+body::after{
+  content:"";
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--coral);color:#000}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.page{position:relative;z-index:3;overflow:hidden}
+.noise-bar{position:fixed;left:0;right:0;top:0;height:1px;z-index:80;background:linear-gradient(90deg,transparent,var(--coral),var(--amber),transparent);opacity:.6;animation:scanBar 7s linear infinite}
+@keyframes scanBar{0%{top:-1px;opacity:.2}10%{opacity:.7}100%{top:100%;opacity:.05}}
+.wrap{width:min(1220px,calc(100% - 40px));margin:0 auto}
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:70;
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  padding:20px clamp(18px,4.8vw,76px);
+  border-bottom:1px solid transparent;
+  transition:background .32s ease,border-color .32s ease,backdrop-filter .32s ease;
+}
+nav.solid{background:rgba(6,6,8,.55);backdrop-filter:blur(18px) saturate(140%);border-color:var(--line)}
+.brand{display:flex;flex-direction:column;line-height:1.05}
+.brand b{font-family:var(--display);font-size:15px;letter-spacing:.08em;font-weight:700;text-transform:uppercase}
+.brand b span{color:var(--coral)}
+.brand small{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+.nav-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{font-family:var(--mono);font-size:12px;color:var(--muted);padding:9px 12px;border-radius:999px;border:1px solid transparent;transition:.25s ease}
+.nav-links a:hover{color:var(--text);border-color:var(--edge);background:rgba(255,255,255,.045)}
+.nav-links .pill{border-color:var(--edge2);color:#f4f3f1;background:rgba(255,107,74,.08)}
+.nav-links .pill:hover{background:var(--coral);color:#000}
+.hero{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.16fr) minmax(320px,.84fr);gap:52px;align-items:center;padding:126px 0 70px}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--coral);letter-spacing:.18em;margin-bottom:22px;text-transform:uppercase}
+h1{font-family:var(--display);font-size:clamp(3rem,7.4vw,7.6rem);line-height:.93;letter-spacing:-.062em;max-width:11.2ch}
+h1 .grad{background:linear-gradient(105deg,var(--coral),var(--amber) 44%,#f4f3f1 78%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{max-width:72ch;margin-top:28px;color:var(--muted);font-size:clamp(1.02rem,1.4vw,1.18rem)}
+.lead strong{color:var(--text);font-weight:600}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:13px 20px;border-radius:999px;font-family:var(--mono);font-size:13px;border:1px solid var(--edge);background:rgba(255,255,255,.04);color:var(--text);transition:transform .25s ease,border-color .25s ease,background .25s ease,color .25s ease}
+.btn:hover{transform:translateY(-3px);border-color:var(--edge2);background:rgba(255,107,74,.09)}
+.btn.primary{background:var(--coral);color:#000;border-color:var(--coral);font-weight:600}
+.btn.primary:hover{background:var(--amber)}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.badge{font-family:var(--mono);font-size:12px;color:#f4f3f1;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:8px 12px;border-radius:999px;backdrop-filter:blur(12px)}
+.lab-panel{position:relative;min-height:560px;border-radius:var(--radius);padding:24px;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));border:1px solid var(--edge);box-shadow:0 30px 100px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(22px) saturate(150%)}
+.lab-panel::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 65% 20%,rgba(255,107,74,.23),transparent 28%),radial-gradient(circle at 15% 85%,rgba(255,179,71,.16),transparent 30%);filter:blur(8px);opacity:.78}
+.lab-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 0 42%,rgba(255,255,255,.12) 48%,transparent 56%);transform:translateX(-80%);animation:glassSweep 9s ease-in-out infinite}
+@keyframes glassSweep{0%,70%{transform:translateX(-85%)}100%{transform:translateX(85%)}}
+.lab-content{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;gap:18px}
+.signal-card{border:1px solid var(--line);border-radius:24px;background:rgba(2,7,5,.46);padding:22px;backdrop-filter:blur(18px)}
+.signal-card .label{font-family:var(--mono);font-size:12px;color:var(--coral);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em}
+.signal-card h2{font-family:var(--display);font-size:clamp(1.45rem,2.5vw,2.15rem);line-height:1.08;letter-spacing:-.03em}
+.signal-card p{margin-top:12px;color:var(--muted)}
+.orbit{height:220px;border-radius:28px;border:1px solid var(--line);background:radial-gradient(circle at 50% 50%,rgba(255,107,74,.16),transparent 34%),rgba(255,255,255,.025);position:relative;overflow:hidden}
+.orbit::before,.orbit::after{content:"";position:absolute;inset:34px;border:1px solid rgba(255,255,255,.11);border-radius:50%;animation:spin 15s linear infinite}
+.orbit::after{inset:70px;border-color:rgba(255,179,71,.2);animation-duration:9s;animation-direction:reverse}
+.node{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--coral);box-shadow:0 0 24px var(--coral)}
+.node.n1{left:20%;top:32%}.node.n2{right:25%;top:22%;background:var(--amber);box-shadow:0 0 24px var(--amber)}.node.n3{left:52%;bottom:20%;background:var(--red);box-shadow:0 0 24px var(--red)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:auto}
+.mini{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.035)}
+.mini b{font-family:var(--display);font-size:1.55rem;line-height:1;background:linear-gradient(100deg,var(--amber),var(--coral));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.mini span{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px}
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:rgba(0,0,0,.22)}
+.marquee{display:flex;gap:52px;width:max-content;padding:22px 0;animation:marquee 34s linear infinite}
+.marquee span{font-family:var(--display);font-size:clamp(1.1rem,2.1vw,1.6rem);font-weight:600;color:rgba(238,248,239,.42);white-space:nowrap}
+.marquee .dot{color:var(--coral)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+section{padding:clamp(72px,9vw,128px) 0}
+.section-head{display:flex;align-items:baseline;gap:18px;margin-bottom:40px}
+.section-head .num{font-family:var(--mono);font-size:12px;color:var(--coral);letter-spacing:.1em}
+.section-head h2{font-family:var(--display);font-size:clamp(1.75rem,3.4vw,3rem);line-height:1.05;letter-spacing:-.04em;font-weight:650}
+.section-head .line{height:1px;background:var(--line);flex:1;min-width:42px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.032));border:1px solid var(--line);backdrop-filter:blur(20px) saturate(135%);transition:transform .35s ease,border-color .35s ease,background .35s ease}
+.card:hover{transform:translateY(-5px);border-color:var(--edge2);background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,107,74,.045))}
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.11),transparent 44%)}
+.card-inner{position:relative;z-index:2;padding:28px}
+.tag{font-family:var(--mono);font-size:11px;color:var(--coral);letter-spacing:.11em;text-transform:uppercase;margin-bottom:16px}
+.card h3{font-family:var(--display);font-size:clamp(1.2rem,2vw,1.55rem);letter-spacing:-.025em;line-height:1.15;margin-bottom:12px}
+.card p{color:var(--muted)}
+.large-card .card-inner{padding:36px}
+.large-card h3{font-size:clamp(1.7rem,3.2vw,2.6rem);max-width:12ch}
+.profile-callout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch}
+.profile-link{min-height:100%;display:flex;flex-direction:column;justify-content:space-between}
+.profile-link .big-arrow{font-size:44px;line-height:1;color:var(--amber);align-self:flex-end;transition:transform .35s ease}
+.profile-link:hover .big-arrow{transform:translate(8px,-8px)}
+.pulse-list{display:flex;flex-direction:column;gap:12px}
+.pulse{position:relative;padding-left:26px;color:var(--muted)}
+.pulse::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 18px var(--coral)}
+.work-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.work{display:grid;grid-template-columns:150px 1fr 1.15fr;gap:24px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line)}
+.work .year{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.work h3{font-family:var(--display);font-size:clamp(1.05rem,1.8vw,1.35rem);line-height:1.15;letter-spacing:-.02em}
+.work .org{font-family:var(--mono);font-size:12px;color:var(--coral);margin-top:8px}
+.work .detail{font-size:14px;color:var(--muted)}
+.tool-cloud{display:flex;gap:10px;flex-wrap:wrap}
+.tool-cloud span{font-family:var(--mono);font-size:12px;color:var(--text);border:1px solid var(--line);background:rgba(255,255,255,.04);padding:9px 12px;border-radius:999px}
+.contact .card-inner{text-align:center;padding:clamp(38px,7vw,76px)}
+.contact h2{font-family:var(--display);font-size:clamp(2.1rem,5.4vw,5rem);line-height:.98;letter-spacing:-.06em;margin-bottom:20px}
+.contact h2 .grad{background:linear-gradient(105deg,var(--coral),var(--amber),#f4f3f1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.contact p{max-width:760px;margin:0 auto;color:var(--muted);font-size:1.06rem}
+.contact-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:30px}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--dim);font-family:var(--mono);font-size:11px}
+.footer-row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media(max-width:980px){
+  nav{position:absolute}.nav-links{display:none}.hero{grid-template-columns:1fr;padding-top:120px}.lab-panel{min-height:auto}.grid-2,.grid-3,.profile-callout{grid-template-columns:1fr}.work{grid-template-columns:1fr;gap:8px}.work .detail{margin-top:8px}
+}
+@media(max-width:640px){
+  .wrap{width:min(100% - 28px,1220px)}.hero{padding-top:104px}h1{font-size:clamp(2.8rem,15vw,4.7rem)}.mini-grid{grid-template-columns:1fr}.card-inner{padding:22px}.hero-actions .btn{width:100%}.contact-actions .btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="noise-bar" aria-hidden="true"></div>
+<div class="page">
+  <nav id="nav" aria-label="Main navigation">
+    <a class="brand" href="./" aria-label="GRIDtRAVELER Labs home">
+      <b>GRID<span>t</span>RAVELER Labs</b>
+      <small>Realtime worlds, simulation, spatial systems</small>
+    </a>
+    <div class="nav-links">
+      <a href="#systems">Systems</a>
+      <a href="#work">Proof</a>
+      <a href="#labs">Labs</a>
+      <a href="https://www.gridtravelerlabs.com/outsourcingimagination.html">Field notes</a>
+      <a href="profile.html" class="pill">About Andrey</a>
+      <a href="#contact">Start conversation</a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero wrap">
+      <div class="hero-copy reveal">
+        <div class="kicker">Creative technology lab, Unreal Engine, Houdini FX, XR</div>
+        <h1>Realtime worlds for <span class="grad">machines, people, and stories.</span></h1>
+        <p class="lead"><strong>GRIDtRAVELER Labs</strong> builds high fidelity 3D systems for visualization, vehicle and RBD simulation, crowd and environment systems, XR design review, virtual production, and cinematic realtime experiences. The work sits between art direction, technical execution, procedural thinking, and production delivery.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="profile.html">View professional profile</a>
+          <a class="btn" href="https://www.gridtravelerlabs.com/outsourcingimagination.html">Field notes</a>
+          <a class="btn" href="mailto:gridtraveler@gmail.com">Start conversation</a>
+          <a class="btn" href="https://www.artstation.com/gridtraveler" target="_blank" rel="noopener">Digital art</a>
+        </div>
+        <div class="hero-badges" aria-label="Core capabilities">
+          <span class="badge">Unreal Engine 5</span>
+          <span class="badge">Houdini FX</span>
+          <span class="badge">Vehicle RBD</span>
+          <span class="badge">Crowd Simulation</span>
+          <span class="badge">XR, MR, VR</span>
+          <span class="badge">3D Environments</span>
+        </div>
+      </div>
+
+      <aside class="lab-panel reveal" aria-label="GRIDtRAVELER Labs signal panel">
+        <div class="lab-content">
+          <div class="signal-card">
+            <div class="label">Lab Signal</div>
+            <h2>Production ready worlds, simulation prototypes, and realtime visual systems.</h2>
+            <p>Not a payment platform. Not a generic agency template. A focused home base for cinematic 3D, technical art, procedural simulation, XR, and environment systems.</p>
+          </div>
+          <div class="orbit" aria-hidden="true">
+            <span class="node n1"></span>
+            <span class="node n2"></span>
+            <span class="node n3"></span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini"><b>10+</b><span>Years in realtime and 3D production</span></div>
+            <div class="mini"><b>UE5</b><span>Lumen, Nanite, Niagara, PCG</span></div>
+            <div class="mini"><b>HFX</b><span>RBD, crowds, fluids, terrain</span></div>
+            <div class="mini"><b>XR</b><span>VR, MR, OpenXR, design review</span></div>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <div class="strip" aria-label="Selected clients and production contexts">
+      <div class="marquee">
+        <span>Volvo Group</span><span class="dot">·</span><span>Sphere Las Vegas</span><span class="dot">·</span><span>Deloitte</span><span class="dot">·</span><span>Riot Games Worlds</span><span class="dot">·</span><span>Morgan Wallen Tour</span><span class="dot">·</span><span>Katy Perry Play</span><span class="dot">·</span><span>The Weather Channel</span><span class="dot">·</span><span>Live Nation</span><span class="dot">·</span><span>Disney</span><span class="dot">·</span>
+        <span>Volvo Group</span><span class="dot">·</span><span>Sphere Las Vegas</span><span class="dot">·</span><span>Deloitte</span><span class="dot">·</span><span>Riot Games Worlds</span><span class="dot">·</span><span>Morgan Wallen Tour</span><span class="dot">·</span><span>Katy Perry Play</span><span class="dot">·</span><span>The Weather Channel</span><span class="dot">·</span><span>Live Nation</span><span class="dot">·</span><span>Disney</span><span class="dot">·</span>
+      </div>
+    </div>
+
+    <section id="systems" class="wrap">
+      <div class="section-head reveal"><span class="num">01</span><h2>What GRIDtRAVELER Labs builds</h2><span class="line"></span></div>
+      <div class="grid-3">
+        <article class="card reveal"><div class="card-inner"><div class="tag">Realtime visualization</div><h3>Digital twins and design review</h3><p>Photoreal environments, vehicle visualization, materials, lighting, scale, camera systems, and interactive scenes for teams that need to understand complex products before they are built.</p></div></article>
+        <article class="card reveal"><div class="card-inner"><div class="tag">Houdini simulation</div><h3>Procedural worlds and dynamics</h3><p>RBD vehicle motion, crowds, agents, fluids, oceans, particles, terrains, scattering, procedural environments, and clean export thinking for Unreal Engine and realtime delivery.</p></div></article>
+        <article class="card reveal"><div class="card-inner"><div class="tag">Unreal Engine systems</div><h3>Interactive technical art</h3><p>Blueprint architecture, Niagara, PCG, Lumen, Nanite, Chaos, Sequencer, material systems, UI widgets, optimization, and reliable presentation builds.</p></div></article>
+        <article class="card reveal"><div class="card-inner"><div class="tag">XR, MR, VR</div><h3>Immersive spatial interfaces</h3><p>OpenXR, Varjo workflows, PCVR, Quest thinking, hand tracking, spatial UI, user comfort, multi user reviews, and headset based visualization for design, training, and prototyping.</p></div></article>
+        <article class="card reveal"><div class="card-inner"><div class="tag">Virtual production</div><h3>Stage and broadcast visuals</h3><p>LED volume content, realtime environments, mixed reality VFX, sound reactive systems, DMX driven visuals, and fast iteration workflows for live and broadcast pressure.</p></div></article>
+        <article class="card reveal"><div class="card-inner"><div class="tag">3D environments</div><h3>Atmosphere, worlds, and scale</h3><p>Cities, landscapes, weather, lighting, post process, hard surface assets, cinematic layout, environment dressing, and scalable scene organization for high fidelity worlds.</p></div></article>
+      </div>
+    </section>
+
+    <section id="labs" class="wrap">
+      <div class="section-head reveal"><span class="num">02</span><h2>The lab direction</h2><span class="line"></span></div>
+      <div class="profile-callout">
+        <article class="card large-card reveal"><div class="card-inner"><div class="tag">Studio focus</div><h3>Beautiful systems that can actually run.</h3><p>GRIDtRAVELER Labs is built around a practical belief. The strongest visual work is no longer just a render. It is a controllable realtime system with logic, timing, performance, simulation behavior, and a clear story.</p><div class="pulse-list" style="margin-top:22px"><div class="pulse">Automotive and vehicle visualization, including RBD, materials, XR design review, and digital twin thinking.</div><div class="pulse">Houdini driven procedural environments, crowds, terrain, fluids, particles, and simulation caches.</div><div class="pulse">Unreal Engine delivery for cinematics, virtual production, interactive prototypes, and spatial UI systems.</div></div></div></article>
+        <a class="card profile-link reveal" href="profile.html" aria-label="Open Andrey Shcherbinin professional profile">
+          <div class="card-inner">
+            <div class="tag">Clear path to profile.html</div>
+            <h3>About Andrey Shcherbinin</h3>
+            <p>The professional profile page contains the detailed resume, selected production history, role fit, portfolio links, LinkedIn, and GitHub hosted PDF resume.</p>
+            <div class="big-arrow">↗</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="work" class="wrap">
+      <div class="section-head reveal"><span class="num">03</span><h2>Production proof</h2><span class="line"></span></div>
+      <div class="work-list">
+        <article class="work reveal"><div class="year">Volvo</div><div><h3>Automotive visualization and XR review</h3><div class="org">Vehicle digital twins, MR, VR, OpenXR</div></div><div class="detail">Photoreal design review, real time materials, collaborative evaluation, Varjo XR4, hand tracking, and early vehicle validation workflows.</div></article>
+        <article class="work reveal"><div class="year">Sphere</div><div><h3>Mission critical realtime VFX</h3><div class="org">Deloitte, Las Vegas Sphere</div></div><div class="detail">Niagara, DMX, responsive lighting, procedural systems, and realtime visual storytelling at large audience scale.</div></article>
+        <article class="work reveal"><div class="year">Stage</div><div><h3>Concert and LED volume systems</h3><div class="org">Morgan Wallen, Katy Perry, Live Nation</div></div><div class="detail">Unreal environments, Sequencer, Movie Render Queue, character and VFX work, simulations, sound reactive shaders, and stage visuals.</div></article>
+        <article class="work reveal"><div class="year">Broadcast</div><div><h3>Mixed reality and virtual production</h3><div class="org">Riot Games Worlds, The Weather Channel</div></div><div class="detail">Mixed reality VFX, performant shaders, realtime weather worlds, C plus plus Blueprint environments, lighting, dressing, and virtual production workflows.</div></article>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="section-head reveal"><span class="num">04</span><h2>Capabilities map</h2><span class="line"></span></div>
+      <article class="card reveal"><div class="card-inner"><div class="tool-cloud"><span>Unreal Engine 5</span><span>Houdini FX</span><span>Niagara</span><span>PCG</span><span>Blueprints</span><span>Lumen</span><span>Nanite</span><span>Chaos</span><span>OpenXR</span><span>Varjo XR4</span><span>VR</span><span>MR</span><span>XR</span><span>Vehicle RBD</span><span>Crowds</span><span>Agents</span><span>FLIP</span><span>Whitewater</span><span>Oceans</span><span>HeightFields</span><span>Solaris</span><span>Karma</span><span>OpenUSD</span><span>NVIDIA Omniverse</span><span>Cinema 4D</span><span>Blender</span><span>Redshift</span><span>Octane</span><span>ZBrush</span><span>Substance</span><span>Figma</span><span>After Effects</span><span>DaVinci Resolve</span><span>ComfyUI</span><span>TouchDesigner</span></div></div></article>
+    </section>
+
+    <section class="wrap contact" id="contact">
+      <article class="card reveal"><div class="card-inner"><h2>Start with the <span class="grad">world, vehicle, or simulation.</span></h2><p>Use this page as the front door to GRIDtRAVELER Labs. For the full professional background, open profile.html. For collaboration, production support, prototype development, or role conversations, start here.</p><div class="contact-actions"><a class="btn primary" href="mailto:gridtraveler@gmail.com">Start conversation</a><a class="btn" href="profile.html">Open profile.html</a><a class="btn" href="https://www.gridtravelerlabs.com/outsourcingimagination.html">Field notes</a><a class="btn" href="https://www.linkedin.com/in/gridtraveler/" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="https://www.artstation.com/gridtraveler" target="_blank" rel="noopener">Digital art</a></div></div></article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row"><div>GRIDtRAVELER Labs, realtime worlds and spatial systems</div><div><a href="profile.html">About Andrey</a>, <a href="https://www.gridtravelerlabs.com/outsourcingimagination.html">Field notes</a>, <a href="mailto:gridtraveler@gmail.com">gridtraveler@gmail.com</a></div></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const nav=document.getElementById('nav');
+  const setNav=()=>nav.classList.toggle('solid',window.scrollY>34);
+  window.addEventListener('scroll',setNav,{passive:true});setNav();
+  const els=document.querySelectorAll('.reveal');
+  const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach((el,i)=>{el.style.transitionDelay=(i%8)*.035+'s';io.observe(el);});
+})();
+
+(function(){
+  const canvas=document.getElementById('fx');
+  const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const gl=canvas.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:false});
+  if(!gl){canvas.style.background='radial-gradient(circle at 50% 35%,#1a0d08,#000)';return;}
+
+  function resize(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;
+    canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';
+    gl.viewport(0,0,canvas.width,canvas.height);
+  }
+  resize();addEventListener('resize',resize);
+
+  const N=(innerWidth<700)?5500:11000;
+  const pos=new Float32Array(N*3);
+  const seed=new Float32Array(N);
+  for(let i=0;i<N;i++){
+    const a=Math.random()*Math.PI*2;
+    const r=Math.pow(Math.random(),0.5)*1.9;
+    const y=(Math.random()-0.5)*0.9;
+    pos[i*3]=Math.cos(a)*r;
+    pos[i*3+1]=y+Math.sin(r*3.0)*0.18;
+    pos[i*3+2]=Math.sin(a)*r;
+    seed[i]=Math.random();
+  }
+
+  const vs=`
+    attribute vec3 p; attribute float s;
+    uniform float t; uniform mat4 proj; uniform mat4 view; uniform vec2 mouse;
+    varying float v;
+    void main(){
+      vec3 q=p;
+      float w=sin(q.x*1.5+t*0.6)*0.12+cos(q.z*1.7-t*0.5)*0.12;
+      q.y+=w+sin(t*0.3+s*6.28)*0.04;
+      float ang=t*0.06+length(q.xz)*0.15;
+      float ca=cos(ang),sa=sin(ang);
+      q.xz=mat2(ca,-sa,sa,ca)*q.xz;
+      q.x+=mouse.x*0.25; q.y+=mouse.y*0.15;
+      vec4 mv=view*vec4(q,1.0);
+      gl_Position=proj*mv;
+      gl_PointSize=(2.2+s*2.0)*(3.0/-mv.z);
+      v=clamp((q.y+1.0)*0.5,0.0,1.0)+s*0.3;
+    }`;
+  const fs=`
+    precision mediump float; varying float v;
+    void main(){
+      vec2 c=gl_PointCoord-0.5;
+      float d=dot(c,c);
+      if(d>0.25) discard;
+      float al=smoothstep(0.25,0.0,d);
+      vec3 amber=vec3(1.0,0.70,0.28);
+      vec3 coral=vec3(1.0,0.42,0.29);
+      vec3 red=vec3(0.77,0.18,0.18);
+      vec3 col=mix(red,coral,smoothstep(0.0,0.55,v));
+      col=mix(col,amber,smoothstep(0.5,1.0,v));
+      gl_FragColor=vec4(col,al*0.85);
+    }`;
+  function sh(type,src){const shader=gl.createShader(type);gl.shaderSource(shader,src);gl.compileShader(shader);return shader;}
+  const prog=gl.createProgram();
+  gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));
+  gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(prog);gl.useProgram(prog);
+
+  const pb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,pb);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.STATIC_DRAW);
+  const pl=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(pl);gl.vertexAttribPointer(pl,3,gl.FLOAT,false,0,0);
+  const sb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,sb);gl.bufferData(gl.ARRAY_BUFFER,seed,gl.STATIC_DRAW);
+  const sl=gl.getAttribLocation(prog,'s');gl.enableVertexAttribArray(sl);gl.vertexAttribPointer(sl,1,gl.FLOAT,false,0,0);
+
+  const uT=gl.getUniformLocation(prog,'t');
+  const uProj=gl.getUniformLocation(prog,'proj');
+  const uView=gl.getUniformLocation(prog,'view');
+  const uMouse=gl.getUniformLocation(prog,'mouse');
+
+  function perspective(fov,asp,n,f){
+    const t=1/Math.tan(fov/2);
+    return new Float32Array([t/asp,0,0,0,0,t,0,0,0,0,(f+n)/(n-f),-1,0,0,(2*f*n)/(n-f),0]);
+  }
+  function view(){
+    const z=-4.2,y=-0.15;
+    return new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,y,z,1]);
+  }
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+  gl.clearColor(0,0,0,0);
+
+  let mx=0,my=0,tmx=0,tmy=0;
+  addEventListener('mousemove',e=>{tmx=(e.clientX/innerWidth-0.5)*2;tmy=-(e.clientY/innerHeight-0.5)*2;},{passive:true});
+
+  let start=performance.now();
+  function frame(now){
+    const t=reduce?0:(now-start)/1000;
+    mx+=(tmx-mx)*0.04;my+=(tmy-my)*0.04;
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform1f(uT,t);
+    gl.uniformMatrix4fv(uProj,false,perspective(1.05,innerWidth/innerHeight,0.1,100));
+    gl.uniformMatrix4fv(uView,false,view());
+    gl.uniform2f(uMouse,mx,my);
+    gl.drawArrays(gl.POINTS,0,N);
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  if(reduce)frame(performance.now());
+})();
+</script>
+</body>
+</html>
